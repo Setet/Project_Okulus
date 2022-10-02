@@ -2,11 +2,15 @@ import tkinter
 from tkinter import *
 from tkinter import scrolledtext
 
+import sys
+import time
+
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 from gradient_d import makeData, Funct_consider
+
 
 def Lab_1_window():
     def draw():
@@ -25,29 +29,27 @@ def Lab_1_window():
 
         for i in range(len(x_cs)):
             if i < (len(x_cs) - 1):
-                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black")
+                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
             else:
                 ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
 
             canvas.draw()
-            txt.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {z_cs[i]}\n")# Это я так понимаю, 
-            # ты даешь каждой точке цифру по её счету и цифра должна отображаться на графике возле точки, если это так, то оно не работает(
-            # Если ты тэгаешь эти точки по индексу, то ладно, но нахрена, а главное...
+            txt.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {z_cs[i]}\n")
 
-            # Время. Я так понимаю, что та штука отрабатывала как нужно, но сначала отрабатывала функция с задержкой времени, а потом только отрисовывался график
-            # как это решить? хз. 
-            # Предположу, что это какие-то приколы интерфейса, и на голом плотлибе оно работало бы как нужно
+            window_lab_1.update() # Ты был очень близок. Тебе просто нужно было нагуглить эту функцию обновления отрисовки)
+            time.sleep(0.5)
 
-            # Вместо этого, предлагаю идею выше, и все точки делать черными, кроме последней искомой, она будет красной
-            # НО, когда точек много, красную точку хер найдешь в этой мешанине, поэтому как вариант, можно сделать черные точки меньше, чем красная, если так можно
-            # И пожалуйста, если это возможно, СДЕЛАЙ ОКОШКО С ГРАФИКОМ БООООООЛЛЛЬЬЬШЕЕЕЕЕ, когда я начинаю увеличивать график, то он не выходит за рамки 150х150рх
-            # разглядеть что-то просто невозможно, можно сам интерфейс увеличить, помогает, но это полумеры
-            
 
     def delete():
         txt.delete(1.0, END)
 
     window_lab_1 = tkinter.Tk()
+
+    if ( sys.platform.startswith('win')): 
+        window_lab_1.iconbitmap(r'pic/Pop_cat_open.ico')
+    else:
+        window_lab_1.iconbitmap(r'@pic/Pop_cat_open.xbm')
+
     window_lab_1.wm_title("Лабораторная работа № 1")
 
     x, y, z = makeData()

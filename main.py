@@ -1,13 +1,12 @@
 import tkinter
 from tkinter import *
-from tkinter import scrolledtext
 
-from matplotlib import pyplot as plt
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
+import sys
 
 from lab1 import Lab_1_window
 from lab2 import Lab_2_window
+from lab3 import Lab_3_window
+
 
 
 def Lab_4_window():
@@ -38,8 +37,14 @@ def Lab_8_window():
 def main():
     window = Tk()
 
-    window.title("Main menu")
-    window.geometry('350x600')
+    window.title("Окно выбора лабораторной работы")
+
+    if ( sys.platform.startswith('win')): 
+        window.iconbitmap(r'pic/Pop_cat_closed.ico')
+    else:
+        window.iconbitmap(r'@pic/Pop_cat_closed.xbm')
+
+    window.geometry('400x600')
 
     btn_lab1 = Button(window, text="Лабораторная работа № 1", foreground="white", background="#FF69B4",
                       command=Lab_1_window)
@@ -49,7 +54,8 @@ def main():
                       command=Lab_2_window)
     btn_lab2.pack(fill=BOTH, side=TOP, expand=True)
 
-    btn_lab3 = Button(window, text="Лабораторная работа № 3", foreground="black", background="#FFA500")
+    btn_lab3 = Button(window, text="Лабораторная работа № 3", foreground="black", background="#FFA500",
+                      command=Lab_3_window)
     btn_lab3.pack(fill=BOTH, side=TOP, expand=True)
 
     btn_lab4 = Button(window, text="Лабораторная работа № 4", foreground="black", background="#FFFF00")
