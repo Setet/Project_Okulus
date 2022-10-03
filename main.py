@@ -8,7 +8,6 @@ from lab2 import Lab_2_window
 from lab3 import Lab_3_window
 
 
-
 def Lab_4_window():
     window_lab_4 = tkinter.Tk()
     window_lab_4.wm_title("Лабораторная работа № 4")
@@ -39,7 +38,7 @@ def main():
 
     window.title("Окно выбора лабораторной работы")
 
-    if ( sys.platform.startswith('win')): 
+    if sys.platform.startswith('win'):
         window.iconbitmap(r'pic/Pop_cat_closed.ico')
     else:
         window.iconbitmap(r'@pic/Pop_cat_closed.xbm')

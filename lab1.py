@@ -16,8 +16,8 @@ def Lab_1_window():
     def draw():
         fig.clf()
 
-        ax = fig.add_subplot(projection='3d')
-        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        beb = fig.add_subplot(projection='3d')
+        beb.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
         res_x = txt_1.get()
@@ -29,23 +29,23 @@ def Lab_1_window():
 
         for i in range(len(x_cs)):
             if i < (len(x_cs) - 1):
-                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
+                beb.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
             else:
-                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
+                beb.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
 
             canvas.draw()
             txt.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {z_cs[i]}\n")
 
-            window_lab_1.update() # Ты был очень близок. Тебе просто нужно было нагуглить эту функцию обновления отрисовки)
-            time.sleep(0.5)
-
+            window_lab_1.update()
+            delay = txt_5.get()
+            time.sleep(float(delay))
 
     def delete():
         txt.delete(1.0, END)
 
     window_lab_1 = tkinter.Tk()
 
-    if ( sys.platform.startswith('win')): 
+    if sys.platform.startswith('win'):
         window_lab_1.iconbitmap(r'pic/Pop_cat_open.ico')
     else:
         window_lab_1.iconbitmap(r'@pic/Pop_cat_open.xbm')
@@ -55,7 +55,7 @@ def Lab_1_window():
     x, y, z = makeData()
 
     fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
+    fig.add_subplot(projection='3d')
 
     canvas = FigureCanvasTkAgg(fig, master=window_lab_1)
     canvas.draw()
@@ -89,11 +89,17 @@ def Lab_1_window():
     txt_4 = Entry(window_lab_1, width=10)
     txt_4.pack(side=LEFT, padx=5, pady=5)
 
+    lbl_7 = Label(window_lab_1, text="Задержка в секундах")
+    lbl_7.pack(side=LEFT, padx=5, pady=5)
+
+    txt_5 = Entry(window_lab_1, width=10)
+    txt_5.pack(side=LEFT, padx=5, pady=5)
+
     lbl_5 = Label(window_lab_1, text="Функция Химмельблау")
     lbl_5.pack(side=LEFT, padx=5, pady=5, anchor=N)
 
-    lbl_5 = Label(window_lab_1, text="Консоль лог")
-    lbl_5.pack(side=TOP, padx=5, pady=5)
+    lbl_6 = Label(window_lab_1, text="Консоль лог")
+    lbl_6.pack(side=TOP, padx=5, pady=5)
 
     txt = scrolledtext.ScrolledText(window_lab_1, width=40, height=10)
     txt.pack(side=RIGHT, padx=5, pady=5)

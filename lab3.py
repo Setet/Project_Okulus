@@ -12,12 +12,21 @@ from Rosenbrock_function import makeData
 
 
 def Lab_3_window():
+    def selection():
+        selection = "You selected the option " + str(var.get())
+        txt.insert(INSERT, selection)
+
     def draw():
         fig.clf()
 
-        ax = fig.add_subplot(projection='3d')
-        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        beb = fig.add_subplot(projection='3d')
+        beb.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
+
+        if var.get() == 0:
+            txt.insert(INSERT, "Max")
+        elif var.get() == 1:
+            txt.insert(INSERT, "Min")
 
         '''
         x_cs = []
@@ -32,9 +41,9 @@ def Lab_3_window():
 
         for i in range(len(x_cs)):
             if i < (len(x_cs) - 1):
-                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
+                beb.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
             else:
-                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
+                beb.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
                 canvas.draw()
         '''
 
@@ -43,7 +52,7 @@ def Lab_3_window():
 
     window_lab_3 = tkinter.Tk()
 
-    if ( sys.platform.startswith('win')): 
+    if sys.platform.startswith('win'):
         window_lab_3.iconbitmap(r'pic/Pop_cat_open.ico')
     else:
         window_lab_3.iconbitmap(r'@pic/Pop_cat_open.xbm')
@@ -51,10 +60,11 @@ def Lab_3_window():
     window_lab_3.wm_title("Лабораторная работа № 3")
 
     x, y, z = makeData()
+    var = IntVar()
 
     fig = plt.figure()
 
-    ax = fig.add_subplot(projection='3d')
+    fig.add_subplot(projection='3d')
 
     canvas = FigureCanvasTkAgg(fig, master=window_lab_3)
     canvas.draw()
@@ -64,29 +74,23 @@ def Lab_3_window():
     toolbar.update()
     canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
-    lbl_1 = Label(window_lab_3, text="X")
+    lbl_1 = Label(window_lab_3, text="Количество агентов")
     lbl_1.pack(side=LEFT, padx=5, pady=5)
 
     txt_1 = Entry(window_lab_3, width=10)
     txt_1.pack(side=LEFT, padx=5, pady=5)
 
-    lbl_2 = Label(window_lab_3, text="Y")
+    lbl_2 = Label(window_lab_3, text="Количество итераций")
     lbl_2.pack(side=LEFT, padx=5, pady=5)
 
     txt_2 = Entry(window_lab_3, width=10)
     txt_2.pack(side=LEFT, padx=5, pady=5)
 
-    lbl_3 = Label(window_lab_3, text="Начальный шаг")
+    lbl_3 = Label(window_lab_3, text="Разброс мутации")
     lbl_3.pack(side=LEFT, padx=5, pady=5)
 
     txt_3 = Entry(window_lab_3, width=10)
     txt_3.pack(side=LEFT, padx=5, pady=5)
-
-    lbl_4 = Label(window_lab_3, text="Число Итераций")
-    lbl_4.pack(side=LEFT, padx=5, pady=5)
-
-    txt_4 = Entry(window_lab_3, width=10)
-    txt_4.pack(side=LEFT, padx=5, pady=5)
 
     lbl_5 = Label(window_lab_3, text="Функция Розенброка")
     lbl_5.pack(side=LEFT, padx=5, pady=5, anchor=N)
@@ -96,6 +100,14 @@ def Lab_3_window():
 
     txt = scrolledtext.ScrolledText(window_lab_3, width=40, height=10)
     txt.pack(side=RIGHT, padx=5, pady=5)
+
+    print(var)
+    rad_1 = Radiobutton(window_lab_3, text='Минимум', variable=var, value=0, command=selection)
+    rad_1.pack(side=LEFT, padx=5, pady=5)
+
+    print(var)
+    rad_2 = Radiobutton(window_lab_3, text='Максимум', variable=var, value=1, command=selection)
+    rad_2.pack(side=LEFT, padx=5, pady=5)
 
     btn_del = Button(window_lab_3, text="Очистить лог", width=10, command=delete)
     btn_del.pack(side=RIGHT, padx=5, pady=5, anchor=S)
