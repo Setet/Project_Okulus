@@ -9,20 +9,20 @@ def makeData():
 
     xgrid, ygrid = numpy.meshgrid(x, y)
 
-    z = 2 * xgrid * xgrid + 2 * xgrid * ygrid + 2 * ygrid * ygrid - 4 * xgrid - 6 * ygrid
+    z = 2 * xgrid * xgrid + 3 * ygrid * ygrid + 4 * xgrid * ygrid - 6 * xgrid - 3 * ygrid
     return xgrid, ygrid, z
 
 
-def kp():
+def kp(x, y):
     global points
     points = []
 
-    def fun(x):  # Конкретная функция, которую просила Полупанова
+    def fun(x):  # Функция
         x1 = x[0]
         x2 = x[1]
-        return 2 * x1 * x1 + 2 * x1 * x2 + 2 * x2 * x2 - 4 * x1 - 6 * x2
+        return 2 * x1 * x1 + 3 * x2 * x2 + 4 * x1 * x2 - 6 * x1 - 3 * x2
 
-    def constraint(x):  # констрейнт, необходимый для работы
+    def constraint(x): 
         x1 = x[0]
         x2 = x[1]
         return x1 + 2 * x2 - 2
@@ -35,7 +35,7 @@ def kp():
 
     b = (0, float("inf"))  # диапозон поиска
     bnds = (b, b)
-    x0 = (4, 2)  # начальная точка
+    x0 = (x, y)  # начальная точка
     con = {'type': 'eq', 'fun': fun}
 
     # основной вызов
