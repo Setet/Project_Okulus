@@ -38,7 +38,7 @@ def main():
 
     window.title("Окно выбора лабораторной работы")
 
-    if ( sys.platform.startswith('win')): 
+    if sys.platform.startswith('win'):
         window.iconbitmap(r'pic/Pop_cat_closed.ico')
     else:
         window.iconbitmap(r'@pic/Pop_cat_closed.xbm')
