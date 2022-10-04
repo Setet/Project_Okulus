@@ -54,6 +54,11 @@ def Lab_2_window():
 
     window_lab_2.wm_title("Лабораторная работа № 2")
 
+    main_f = LabelFrame(window_lab_2, text="Параметры")
+    left_f = Frame(main_f)
+    right_f = Frame(main_f)
+    txt_f = LabelFrame(window_lab_2, text="Консоль лог")
+
     x, y, z = makeData()
 
     fig = plt.figure()
@@ -67,25 +72,29 @@ def Lab_2_window():
     toolbar.update()
     canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
-    lbl_1 = Label(window_lab_2, text="Задержка в секундах")
-    lbl_1.pack(side=LEFT, padx=5, pady=5)
+    lbl_1 = Label(left_f, text="Задержка в секундах")
+    lbl_2 = Label(window_lab_2, text="Функция :\n2 * x1^2 + 2 * x1^2 + 2 * x2^2 - 4 * x1 - 6 * x2")
 
-    txt_1 = Entry(window_lab_2, width=10)
-    txt_1.pack(side=LEFT, padx=5, pady=5)
+    txt_1 = Entry(right_f, width=10)
 
-    lbl_5 = Label(window_lab_2, text="Функция :\n2 * x1^2 + 2 * x1^2 + 2 * x2^2 - 4 * x1 - 6 * x2")
-    lbl_5.pack(side=LEFT, padx=5, pady=5, anchor=N)
-
-    lbl_5 = Label(window_lab_2, text="Консоль лог")
-    lbl_5.pack(side=TOP, padx=5, pady=5)
-
-    txt = scrolledtext.ScrolledText(window_lab_2, width=40, height=10)
-    txt.pack(side=RIGHT, padx=5, pady=5)
+    txt = scrolledtext.ScrolledText(txt_f, width=40, height=10)
 
     btn_del = Button(window_lab_2, text="Очистить лог", width=10, command=delete)
-    btn_del.pack(side=RIGHT, padx=5, pady=5, anchor=S)
-
     btn = Button(window_lab_2, text="Выполнить", width=10, command=draw)
+
+    main_f.pack(side=LEFT, fill=Y, padx=5, pady=5)
+    left_f.pack(side=LEFT, padx=5, pady=5)
+    right_f.pack(side=RIGHT, padx=5, pady=5)
+    txt_f.pack(side=RIGHT, padx=5, pady=5)
+
+    lbl_1.pack(side=TOP, padx=5, pady=5)
+    lbl_2.pack(side=TOP, padx=5, pady=5)
+
+    txt_1.pack(side=TOP, padx=5, pady=5)
+
+    txt.pack(padx=5, pady=5)
+
+    btn_del.pack(side=RIGHT, padx=5, pady=5, anchor=S)
     btn.pack(side=RIGHT, padx=5, pady=5, anchor=S)
 
     tkinter.mainloop()

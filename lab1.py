@@ -52,6 +52,11 @@ def Lab_1_window():
 
     window_lab_1.wm_title("Лабораторная работа № 1")
 
+    main_f = LabelFrame(window_lab_1, text="Параметры")
+    left_f = Frame(main_f)
+    right_f = Frame(main_f)
+    txt_f = LabelFrame(window_lab_1, text="Консоль лог")
+
     x, y, z = makeData()
 
     fig = plt.figure()
@@ -65,49 +70,44 @@ def Lab_1_window():
     toolbar.update()
     canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=2)
 
-    lbl_1 = Label(window_lab_1, text="X")
-    lbl_1.pack(side=LEFT, padx=5, pady=5)
-
-    txt_1 = Entry(window_lab_1, width=10)
-    txt_1.pack(side=LEFT, padx=5, pady=5)
-
-    lbl_2 = Label(window_lab_1, text="Y")
-    lbl_2.pack(side=LEFT, padx=5, pady=5)
-
-    txt_2 = Entry(window_lab_1, width=10)
-    txt_2.pack(side=LEFT, padx=5, pady=5)
-
-    lbl_3 = Label(window_lab_1, text="Начальный шаг")
-    lbl_3.pack(side=LEFT, padx=5, pady=5)
-
-    txt_3 = Entry(window_lab_1, width=10)
-    txt_3.pack(side=LEFT, padx=5, pady=5)
-
-    lbl_4 = Label(window_lab_1, text="Число Итераций")
-    lbl_4.pack(side=LEFT, padx=5, pady=5)
-
-    txt_4 = Entry(window_lab_1, width=10)
-    txt_4.pack(side=LEFT, padx=5, pady=5)
-
-    lbl_7 = Label(window_lab_1, text="Задержка в секундах")
-    lbl_7.pack(side=LEFT, padx=5, pady=5)
-
-    txt_5 = Entry(window_lab_1, width=10)
-    txt_5.pack(side=LEFT, padx=5, pady=5)
-
+    lbl_1 = Label(left_f, text="X")
+    lbl_2 = Label(left_f, text="Y")
+    lbl_3 = Label(left_f, text="Начальный шаг")
+    lbl_4 = Label(left_f, text="Число Итераций")
     lbl_5 = Label(window_lab_1, text="Функция Химмельблау")
-    lbl_5.pack(side=LEFT, padx=5, pady=5, anchor=N)
+    lbl_6 = Label(left_f, text="Задержка в секундах")
 
-    lbl_6 = Label(window_lab_1, text="Консоль лог")
-    lbl_6.pack(side=TOP, padx=5, pady=5)
+    txt_1 = Entry(right_f, width=10)
+    txt_2 = Entry(right_f, width=10)
+    txt_3 = Entry(right_f, width=10)
+    txt_4 = Entry(right_f, width=10)
+    txt_5 = Entry(right_f, width=10)
 
-    txt = scrolledtext.ScrolledText(window_lab_1, width=40, height=10)
-    txt.pack(side=RIGHT, padx=5, pady=5)
-
+    txt = scrolledtext.ScrolledText(txt_f, width=40, height=10)
     btn_del = Button(window_lab_1, text="Очистить лог", width=10, command=delete)
-    btn_del.pack(side=RIGHT, padx=5, pady=5, anchor=S)
-
     btn = Button(window_lab_1, text="Выполнить", width=10, command=draw)
+
+    main_f.pack(side=LEFT, fill=Y, padx=5, pady=5)
+    left_f.pack(side=LEFT, padx=5, pady=5)
+    right_f.pack(side=RIGHT, padx=5, pady=5)
+    txt_f.pack(side=RIGHT, padx=5, pady=5)
+
+    lbl_1.pack(side=TOP, padx=5, pady=5)
+    lbl_2.pack(side=TOP, padx=5, pady=5)
+    lbl_3.pack(side=TOP, padx=5, pady=5)
+    lbl_4.pack(side=TOP, padx=5, pady=5)
+    lbl_5.pack(side=TOP, padx=5, pady=5)
+    lbl_6.pack(side=TOP, padx=5, pady=5, anchor=N)
+
+    txt_1.pack(side=TOP, padx=5, pady=5)
+    txt_2.pack(side=TOP, padx=5, pady=5)
+    txt_3.pack(side=TOP, padx=5, pady=5)
+    txt_4.pack(side=TOP, padx=5, pady=5)
+    txt_5.pack(side=TOP, padx=5, pady=5)
+
+    txt.pack(padx=5, pady=5)
+
+    btn_del.pack(side=RIGHT, padx=5, pady=5, anchor=S)
     btn.pack(side=RIGHT, padx=5, pady=5, anchor=S)
 
     tkinter.mainloop()
