@@ -16,8 +16,8 @@ def Lab_1_window():
     def draw():
         fig.clf()
 
-        beb = fig.add_subplot(projection='3d')
-        beb.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
         res_x = txt_1.get()
@@ -29,9 +29,9 @@ def Lab_1_window():
 
         for i in range(len(x_cs)):
             if i < (len(x_cs) - 1):
-                beb.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
+                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
             else:
-                beb.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
+                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
 
             canvas.draw()
             txt.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {z_cs[i]}\n")
