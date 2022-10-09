@@ -59,7 +59,7 @@ def Lab_3_window():
     lbl_1 = Label(left_f, text="Количество агентов")
     lbl_2 = Label(left_f, text="Количество итераций")
     lbl_3 = Label(left_f, text="Разброс мутации")
-    lbl_4 = Label(left_f, text="Выбор без выбора")
+    lbl_4 = Label(left_f, text="Выбор точки поиска")
     lbl_5 = Label(left_f, text="Задержка в секундах")
     lbl_6 = Label(window_lab_3, text="Функция Розенброка")
 
