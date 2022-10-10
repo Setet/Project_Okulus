@@ -3,7 +3,7 @@ import numpy as np
 import numpy
 
 
-def makeData():
+def Make_Data_Lab_2():
     x = numpy.linspace(-10, 10, 100)
     y = numpy.linspace(-10, 10, 100)
 
