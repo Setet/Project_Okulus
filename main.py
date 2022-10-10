@@ -52,8 +52,8 @@ def main():
 
         x, y, z = Make_Data_Lab_2()
 
-        res_x = txt_1_tab_1.get()
-        res_y = txt_2_tab_1.get()
+        res_x = txt_1_tab_2.get()
+        res_y = txt_2_tab_2.get()
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
@@ -74,11 +74,11 @@ def main():
             else:
                 ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
 
-            txt_tab_1.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {round(z_cs[i], 4)}\n")
+            txt_tab_2.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {round(z_cs[i], 4)}\n")
             canvas.draw()
 
             window.update()
-            delay = txt_3_tab_1.get()
+            delay = txt_3_tab_2.get()
             time.sleep(float(delay))
         messagebox.showinfo('Уведомление', 'Готово')
 
@@ -88,9 +88,9 @@ def main():
         x, y, z = Make_Data_Lab_3()
 
         if combo.get() == "Min":
-            txt_tab_1.insert(INSERT, "Что-то делаешь если Max")
+            txt_tab_3.insert(INSERT, "Что-то делаешь если Max")
         elif combo.get() == "Max:":
-            txt_tab_1.insert(INSERT, "Что-то делаешь если Max")
+            txt_tab_3.insert(INSERT, "Что-то делаешь если Max")
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
