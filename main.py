@@ -1,77 +1,345 @@
 import tkinter
-from tkinter import *
-
+import time
 import sys
 
-from lab1 import Lab_1_window
-from lab2 import Lab_2_window
-from lab3 import Lab_3_window
+from tkinter import *
+from tkinter import scrolledtext, messagebox
+from tkinter.ttk import Combobox, Notebook, Style
 
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
-def Lab_4_window():
-    window_lab_4 = tkinter.Tk()
-    window_lab_4.wm_title("Лабораторная работа № 4")
+from PIL import Image, ImageTk, ImageSequence
 
-
-def Lab_5_window():
-    window_lab_5 = tkinter.Tk()
-    window_lab_5.wm_title("Лабораторная работа № 5")
-
-
-def Lab_6_window():
-    window_lab_6 = tkinter.Tk()
-    window_lab_6.wm_title("Лабораторная работа № 6")
-
-
-def Lab_7_window():
-    window_lab_7 = tkinter.Tk()
-    window_lab_7.wm_title("Лабораторная работа № 7")
-
-
-def Lab_8_window():
-    window_lab_8 = tkinter.Tk()
-    window_lab_8.wm_title("Лабораторная работа № 8")
+from Gradient import Make_Data_Lab_1, Funct_consider
+from SLSQP import Make_Data_Lab_2, kp
+from Rosenbrock_function import Make_Data_Lab_3
 
 
 def main():
+    def draw_Lab_1():
+        fig.clf()
+
+        x, y, z = Make_Data_Lab_1()
+
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        res_x = txt_1_tab_1.get()
+        res_y = txt_2_tab_1.get()
+        res_step = txt_3_tab_1.get()
+        res_iterations = txt_4_tab_1.get()
+
+        x_cs, y_cs, z_cs = Funct_consider(float(res_x), float(res_y), float(res_step), int(res_iterations))
+
+        for i in range(len(x_cs)):
+            if i < (len(x_cs) - 1):
+                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
+            else:
+                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
+
+            canvas.draw()
+            txt_tab_1.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {z_cs[i]}\n")
+
+            window.update()
+            delay = txt_5_tab_1.get()
+            time.sleep(float(delay))
+        messagebox.showinfo('Уведомление', 'Готово')
+
+    def draw_Lab_2():
+        fig.clf()
+
+        x, y, z = Make_Data_Lab_2()
+
+        res_x = txt_1_tab_1.get()
+        res_y = txt_2_tab_1.get()
+
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        x_cs = []
+        y_cs = []
+        z_cs = []
+
+        for i, point in kp(res_x, res_y):
+            x_cs.append(point[0])
+            y_cs.append(point[1])
+            z_cs.append(point[2])
+
+        for i in range(len(x_cs)):
+            if i < (len(x_cs) - 1):
+                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="black", s=1, marker="s")
+            else:
+                ax.scatter(x_cs[i - 1], y_cs[i - 1], z_cs[i - 1], c="red")
+
+            txt_tab_1.insert(INSERT, f"{i}) ({round(x_cs[i], 2)})({round(y_cs[i], 2)}) = {round(z_cs[i], 4)}\n")
+            canvas.draw()
+
+            window.update()
+            delay = txt_3_tab_1.get()
+            time.sleep(float(delay))
+        messagebox.showinfo('Уведомление', 'Готово')
+
+    def draw_Lab_3():
+        fig.clf()
+
+        x, y, z = Make_Data_Lab_3()
+
+        if combo.get() == "Min":
+            txt_tab_1.insert(INSERT, "Что-то делаешь если Max")
+        elif combo.get() == "Max:":
+            txt_tab_1.insert(INSERT, "Что-то делаешь если Max")
+
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+        messagebox.showinfo('Уведомление', 'Готово')
+
+    def delete():
+        txt_tab_1.delete(1.0, END)
+
+    def play_gif():
+        img = Image.open(r"pic/pepe_clown.gif")
+
+        lbl_tab_4 = Label(tab_4)
+        lbl_tab_5 = Label(tab_5)
+        lbl_tab_6 = Label(tab_6)
+        lbl_tab_7 = Label(tab_7)
+        lbl_tab_8 = Label(tab_8)
+
+        lbl_tab_4.place(x=0, y=0)
+        lbl_tab_5.place(x=0, y=0)
+        lbl_tab_6.place(x=0, y=0)
+        lbl_tab_7.place(x=0, y=0)
+        lbl_tab_8.place(x=0, y=0)
+
+        for img in ImageSequence.Iterator(img):
+            img = ImageTk.PhotoImage(img)
+            lbl_tab_4.config(image=img)
+            lbl_tab_5.config(image=img)
+            lbl_tab_6.config(image=img)
+            lbl_tab_7.config(image=img)
+            lbl_tab_8.config(image=img)
+
+            tab_4.update()
+            tab_5.update()
+            tab_6.update()
+            tab_7.update()
+            tab_8.update()
+            time.sleep(0.1)
+        tab_4.after(0, play_gif)
+        tab_5.after(0, play_gif)
+        tab_6.after(0, play_gif)
+        tab_7.after(0, play_gif)
+        tab_8.after(0, play_gif)
+
     window = Tk()
 
-    window.title("Окно выбора лабораторной работы")
-
     if sys.platform.startswith('win'):
-        window.iconbitmap(r'pic/Pop_cat_closed.ico')
+        window.iconbitmap(r'pic/Pop_cat_open.ico')
     else:
-        window.iconbitmap(r'@pic/Pop_cat_closed.xbm')
+        window.iconbitmap(r'@pic/Pop_cat_open.xbm')
 
-    window.geometry('400x600')
+    width = window.winfo_screenwidth()
+    height = window.winfo_screenheight()
 
-    btn_lab1 = Button(window, text="Лабораторная работа № 1", foreground="white", background="#FF69B4",
-                      command=Lab_1_window)
-    btn_lab1.pack(fill=BOTH, side=TOP, expand=True)
+    window.geometry("%dx%d" % (width, height))
 
-    btn_lab2 = Button(window, text="Лабораторная работа № 2", foreground="white", background="#FF0000",
-                      command=Lab_2_window)
-    btn_lab2.pack(fill=BOTH, side=TOP, expand=True)
+    window.title("⠑⠎⠇⠊ ⠞⠮ ⠟⠊⠞⠁⠑⠱⠾ ⠪⠞⠕⠂ ⠞⠕ ⠞⠮ ⠁⠝⠊⠍⠑ ⠙⠑⠃⠊⠇⠖")
 
-    btn_lab3 = Button(window, text="Лабораторная работа № 3", foreground="black", background="#FFA500",
-                      command=Lab_3_window)
-    btn_lab3.pack(fill=BOTH, side=TOP, expand=True)
+    fig = plt.figure(figsize=(14, 14))
+    fig.add_subplot(projection='3d')
 
-    btn_lab4 = Button(window, text="Лабораторная работа № 4", foreground="black", background="#FFFF00")
-    btn_lab4.pack(fill=BOTH, side=TOP, expand=True)
+    canvas = FigureCanvasTkAgg(fig, master=window)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 
-    btn_lab5 = Button(window, text="Лабораторная работа № 5", foreground="white", background="#008000")
-    btn_lab5.pack(fill=BOTH, side=TOP, expand=True)
+    toolbar = NavigationToolbar2Tk(canvas, window)
+    toolbar.update()
+    canvas.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 
-    btn_lab6 = Button(window, text="Лабораторная работа № 6", foreground="black", background="#00FFFF")
-    btn_lab6.pack(fill=BOTH, side=TOP, expand=True)
+    Sky = "#DCF0F2"
+    Yellow = "#F2C84B"
 
-    btn_lab7 = Button(window, text="Лабораторная работа № 7", foreground="white", background="#00008B")
-    btn_lab7.pack(fill=BOTH, side=TOP, expand=True)
+    style = Style()
 
-    btn_lab8 = Button(window, text="Лабораторная работа № 8", foreground="white", background="#800080")
-    btn_lab8.pack(fill=BOTH, side=TOP, expand=True)
+    style.theme_create("dummy", parent="alt", settings={
+        "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0]}},
+        "TNotebook.Tab": {
+            "configure": {"padding": [5, 1], "background": Sky},
+            "map": {"background": [("selected", Yellow)],
+                    "expand": [("selected", [1, 1, 1, 0])]}}})
 
+    style.theme_use("dummy")
+
+    tab_control = Notebook(window)
+
+    # Лаба 1
+    tab_1 = Frame(tab_control)
+    tab_control.add(tab_1, text="Lab_1")
+
+    main_f_tab_1 = LabelFrame(tab_1, text="Параметры")
+    left_f_tab_1 = Frame(main_f_tab_1)
+    right_f_tab_1 = Frame(main_f_tab_1)
+    txt_f_tab_1 = LabelFrame(tab_1, text="Консоль лог")
+
+    lbl_1_tab_1 = Label(left_f_tab_1, text="X")
+    lbl_2_tab_1 = Label(left_f_tab_1, text="Y")
+    lbl_3_tab_1 = Label(left_f_tab_1, text="Начальный шаг")
+    lbl_4_tab_1 = Label(left_f_tab_1, text="Число Итераций")
+    lbl_5_tab_1 = Label(tab_1, text="Функция Химмельблау")
+    lbl_6_tab_1 = Label(left_f_tab_1, text="Задержка в секундах")
+
+    txt_1_tab_1 = Entry(right_f_tab_1)
+    txt_2_tab_1 = Entry(right_f_tab_1)
+    txt_3_tab_1 = Entry(right_f_tab_1)
+    txt_4_tab_1 = Entry(right_f_tab_1)
+    txt_5_tab_1 = Entry(right_f_tab_1)
+
+    txt_tab_1 = scrolledtext.ScrolledText(txt_f_tab_1)
+    btn_del_tab_1 = Button(tab_1, text="Очистить лог", command=delete)
+    btn_tab_1 = Button(tab_1, text="Выполнить", foreground="black", background="#00FFFF", command=draw_Lab_1)
+
+    lbl_5_tab_1.pack(side=TOP, padx=5, pady=5)
+    main_f_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
+    left_f_tab_1.pack(side=LEFT, fill=BOTH, expand=True)
+    right_f_tab_1.pack(side=RIGHT, fill=BOTH, expand=True)
+
+    lbl_1_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_2_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_3_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_4_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_6_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_1_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_2_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_3_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_4_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_5_tab_1.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_tab_1.pack(padx=5, pady=5, fill=BOTH, expand=True)
+
+    btn_tab_1.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    txt_f_tab_1.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    btn_del_tab_1.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+
+    # Лаба 2
+    tab_2 = Frame(tab_control)
+    tab_control.add(tab_2, text="Lab_2")
+
+    main_f_tab_2 = LabelFrame(tab_2, text="Параметры")
+    left_f_tab_2 = Frame(main_f_tab_2)
+    right_f_tab_2 = Frame(main_f_tab_2)
+    txt_f_tab_2 = LabelFrame(tab_2, text="Консоль лог")
+
+    lbl_1_tab_2 = Label(tab_2, text="Функция :\n2 * x1^2 + 3 * x2^2 + 4 * x1 * x2 - 6 * x1 - 3 * x2")
+    lbl_2_tab_2 = Label(left_f_tab_2, text="X")
+    lbl_3_tab_2 = Label(left_f_tab_2, text="Y")
+    lbl_4_tab_2 = Label(left_f_tab_2, text="Задержка в секундах")
+
+    txt_1_tab_2 = Entry(right_f_tab_2)
+    txt_2_tab_2 = Entry(right_f_tab_2)
+    txt_3_tab_2 = Entry(right_f_tab_2)
+
+    txt_tab_2 = scrolledtext.ScrolledText(txt_f_tab_2)
+    btn_del_tab_2 = Button(tab_2, text="Очистить лог", command=delete)
+    btn_tab_2 = Button(tab_2, text="Выполнить", foreground="black", background="#00FFFF", command=draw_Lab_2)
+
+    lbl_1_tab_2.pack(side=TOP, padx=5, pady=5)
+    main_f_tab_2.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
+    left_f_tab_2.pack(side=LEFT, fill=BOTH, expand=True)
+    right_f_tab_2.pack(side=RIGHT, fill=BOTH, expand=True)
+
+    lbl_2_tab_2.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_3_tab_2.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_4_tab_2.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_1_tab_2.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_2_tab_2.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_3_tab_2.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_tab_2.pack(padx=5, pady=5, fill=BOTH, expand=True)
+
+    btn_tab_2.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    txt_f_tab_2.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    btn_del_tab_2.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+
+    # Лаба 3
+    tab_3 = Frame(tab_control)
+    tab_control.add(tab_3, text="Lab_3")
+
+    main_f_tab_3 = LabelFrame(tab_3, text="Параметры")
+    left_f_tab_3 = Frame(main_f_tab_3)
+    right_f_tab_3 = Frame(main_f_tab_3)
+    txt_f_tab_3 = LabelFrame(tab_3, text="Консоль лог")
+
+    lbl_1_tab_3 = Label(left_f_tab_3, text="Количество агентов")
+    lbl_2_tab_3 = Label(left_f_tab_3, text="Количество итераций")
+    lbl_3_tab_3 = Label(left_f_tab_3, text="Разброс мутации")
+    lbl_4_tab_3 = Label(left_f_tab_3, text="Выбор точки поиска")
+    lbl_5_tab_3 = Label(left_f_tab_3, text="Задержка в секундах")
+    lbl_6_tab_3 = Label(tab_3, text="Функция Розенброка")
+
+    txt_1_tab_3 = Entry(right_f_tab_3)
+    txt_2_tab_3 = Entry(right_f_tab_3)
+    txt_3_tab_3 = Entry(right_f_tab_3)
+    txt_4_tab_3 = Entry(right_f_tab_3)
+
+    combo = Combobox(right_f_tab_3)
+    combo['values'] = ("Min", "Max")
+
+    txt_tab_3 = scrolledtext.ScrolledText(txt_f_tab_3)
+    btn_del_tab_3 = Button(tab_3, text="Очистить лог", command=delete)
+    btn_tab_3 = Button(tab_3, text="Выполнить", foreground="black", background="#00FFFF", command=draw_Lab_3)
+
+    lbl_6_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    main_f_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
+    left_f_tab_3.pack(side=LEFT, fill=BOTH, expand=True)
+    right_f_tab_3.pack(side=RIGHT, fill=BOTH, expand=True)
+
+    lbl_1_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_2_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_3_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_5_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_1_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_2_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_3_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    combo.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_tab_3.pack(padx=5, pady=5, fill=BOTH, expand=True)
+
+    btn_tab_3.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    txt_f_tab_3.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    btn_del_tab_3.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+
+    # Лаба 4
+    tab_4 = Frame(tab_control)
+    tab_control.add(tab_4, text="Lab_4")
+
+    # Лаба 5
+    tab_5 = Frame(tab_control)
+    tab_control.add(tab_5, text="Lab_5")
+
+    # Лаба 6
+    tab_6 = Frame(tab_control)
+    tab_control.add(tab_6, text="Lab_6")
+
+    # Лаба 7
+    tab_7 = Frame(tab_control)
+    tab_control.add(tab_7, text="Lab_7")
+
+    # Лаба 8
+    tab_8 = Frame(tab_control)
+    tab_control.add(tab_8, text="Lab_8")
+
+    play_gif()
+
+    tab_control.pack(side=RIGHT, fill=BOTH, expand=True)
     window.mainloop()
 
 
