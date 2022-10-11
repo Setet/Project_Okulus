@@ -86,22 +86,36 @@ def main():
 
         x, y, z = Make_Data_Lab_3()
 
-        if combo.get() == "Min":
-            txt_tab_3.insert(INSERT, "Что-то делаешь если Min")
-        elif combo.get() == "Max:":
-            txt_tab_3.insert(INSERT, "Что-то делаешь если Max")
+        pop_number = int(txt_1_tab_3.get())
+        iter_number = int(txt_2_tab_3.get())
+        survive = float(txt_3_tab_3.get())
+        mutation = float(txt_5_tab_3.get())
+        delay = txt_4_tab_3.get()
+        minmax = True
 
+        if combo.get() == "Min":
+            minmax = True
+        elif combo.get() == "Max:":# Чини меня
+            minmax = False
+
+        print(minmax)
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        genetic = GeneticAlgorithmL3(rosen2, 50, True)
+        genetic = GeneticAlgorithmL3(rosen2, iter_number, minmax,mutation,survive,pop_number)
         genetic.generate_start_population(5, 5)
-        genetic.simulation()
+        #genetic.simulation()
 
-        for j in range(100):
+        for j in range(pop_number):
             ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
                        marker="s")
+        if minmax :
+            gen_stat = list(genetic.statistic()[1])
+        else:
+            gen_stat = list(genetic.statistic()[0])
+
+        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
         canvas.draw()
         window.update()
 
@@ -112,28 +126,44 @@ def main():
         canvas.draw()
 
         for i in range(50):
-            for j in range(100):  # Последовательность циклов и объекта genetic советую не менять
+            for j in range(pop_number):  # Последовательность циклов и объекта genetic советую не менять
                 ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
                            marker="s")
-            canvas.draw()
-            window.update()
 
             genetic.select()
             genetic.mutation(i)
-            gen_stat = list(genetic.statistic()[1])
+
+            if minmax :
+                gen_stat = list(genetic.statistic()[1])
+            else:
+                gen_stat = list(genetic.statistic()[0])
+
+            ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+
             txt_tab_3.insert(INSERT,
                              f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
                              f" ({round(gen_stat[1][2], 4)})\n")
-            time.sleep(0.1)
+
+            canvas.draw()
+            window.update()
+            time.sleep(float(delay))
 
             fig.clf()
             ax = fig.add_subplot(projection='3d')
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for j in range(100):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="red")
-        canvas.draw()  # На данный момент я все переменные задаю в коде ручками, когда-нибудь потом исправлю
+        for j in range(pop_number):
+            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                           marker="s")
+        if minmax :
+            gen_stat = list(genetic.statistic()[1])
+        else:
+            gen_stat = list(genetic.statistic()[0])
+
+        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+
+        canvas.draw()
         window.update()
 
         messagebox.showinfo('Уведомление', 'Готово')
@@ -281,9 +311,10 @@ def main():
     right_f_tab_3 = Frame(main_f_tab_3)
     txt_f_tab_3 = LabelFrame(tab_3, text="Консоль лог")
 
-    lbl_1_tab_3 = Label(left_f_tab_3, text="Количество агентов")
+    lbl_1_tab_3 = Label(left_f_tab_3, text="Размер популяции")
     lbl_2_tab_3 = Label(left_f_tab_3, text="Количество итераций")
-    lbl_3_tab_3 = Label(left_f_tab_3, text="Разброс мутации")
+    lbl_3_tab_3 = Label(left_f_tab_3, text="Выживаемость")
+    lbl_7_tab_3 = Label(left_f_tab_3, text="Шанс мутации")
     lbl_4_tab_3 = Label(left_f_tab_3, text="Выбор точки поиска")
     lbl_5_tab_3 = Label(left_f_tab_3, text="Задержка в секундах")
     lbl_6_tab_3 = Label(tab_3, text="Функция Розенброка")
@@ -292,6 +323,7 @@ def main():
     txt_2_tab_3 = Entry(right_f_tab_3)
     txt_3_tab_3 = Entry(right_f_tab_3)
     txt_4_tab_3 = Entry(right_f_tab_3)
+    txt_5_tab_3 = Entry(right_f_tab_3)
 
     combo = Combobox(right_f_tab_3)
     combo['values'] = ("Min", "Max")
@@ -308,12 +340,14 @@ def main():
     lbl_1_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_2_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_3_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_7_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_5_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_1_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_2_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_3_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_5_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     combo.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 

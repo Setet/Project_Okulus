@@ -40,11 +40,11 @@ class GeneticAlgorithmL3:
             if random() > 0.5:
                 pop[0] = parents1[i][1][0]
                 pop[1] = parents2[i][1][1]
-                pop[2] = self.func(pop[0], pop[1])
+                pop[2] = self.func(parents1[i][1][0], parents2[i][1][1])
             else:
                 pop[0] = parents2[i][1][0]
                 pop[1] = parents1[i][1][1]
-                pop[2] = self.func(pop[0], pop[1])
+                pop[2] = self.func(parents2[i][1][0], parents1[i][1][1])
             i += 1
             if i >= cof:
                 break
@@ -56,4 +56,5 @@ class GeneticAlgorithmL3:
             if random() < self.mut_chance:
                 pop[0] += (random() - 0.5) * ((self.generations - cur_gen) / self.generations)
             if random() < self.mut_chance:
-                pop[0] += (random() - 0.5) * ((self.generations - cur_gen) / self.generations)
+                pop[1] += (random() - 0.5) * ((self.generations - cur_gen) / self.generations)
+            pop[2] = self.func(pop[0],pop[1])
