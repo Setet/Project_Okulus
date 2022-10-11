@@ -91,26 +91,23 @@ def main():
         survive = float(txt_3_tab_3.get())
         mutation = float(txt_5_tab_3.get())
         delay = txt_4_tab_3.get()
-        minmax = True
 
         if combo.get() == "Min":
-            minmax = True
-        elif combo.get() == "Max:":# Чини меня
-            minmax = False
+            min_max = True
+        else:
+            min_max = False
 
-        print(minmax)
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        genetic = GeneticAlgorithmL3(rosen2, iter_number, minmax,mutation,survive,pop_number)
+        genetic = GeneticAlgorithmL3(rosen2, iter_number, min_max, mutation, survive, pop_number)
         genetic.generate_start_population(5, 5)
-        #genetic.simulation()
 
         for j in range(pop_number):
             ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
                        marker="s")
-        if minmax :
+        if min_max:
             gen_stat = list(genetic.statistic()[1])
         else:
             gen_stat = list(genetic.statistic()[0])
@@ -133,7 +130,7 @@ def main():
             genetic.select()
             genetic.mutation(i)
 
-            if minmax :
+            if min_max:
                 gen_stat = list(genetic.statistic()[1])
             else:
                 gen_stat = list(genetic.statistic()[0])
@@ -155,8 +152,8 @@ def main():
 
         for j in range(pop_number):
             ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                           marker="s")
-        if minmax :
+                       marker="s")
+        if min_max:
             gen_stat = list(genetic.statistic()[1])
         else:
             gen_stat = list(genetic.statistic()[0])
@@ -168,8 +165,14 @@ def main():
 
         messagebox.showinfo('Уведомление', 'Готово')
 
-    def delete():
+    def delete_Lab_1():
         txt_tab_1.delete(1.0, END)
+
+    def delete_Lab_2():
+        txt_tab_2.delete(1.0, END)
+
+    def delete_Lab_3():
+        txt_tab_2.delete(1.0, END)
 
     window = Tk()
 
@@ -235,7 +238,7 @@ def main():
     txt_5_tab_1 = Entry(right_f_tab_1)
 
     txt_tab_1 = scrolledtext.ScrolledText(txt_f_tab_1)
-    btn_del_tab_1 = Button(tab_1, text="Очистить лог", command=delete)
+    btn_del_tab_1 = Button(tab_1, text="Очистить лог", command=delete_Lab_1)
     btn_tab_1 = Button(tab_1, text="Выполнить", foreground="black", background="#00FFFF", command=draw_Lab_1)
 
     lbl_5_tab_1.pack(side=TOP, padx=5, pady=5)
@@ -280,7 +283,7 @@ def main():
     txt_3_tab_2 = Entry(right_f_tab_2)
 
     txt_tab_2 = scrolledtext.ScrolledText(txt_f_tab_2)
-    btn_del_tab_2 = Button(tab_2, text="Очистить лог", command=delete)
+    btn_del_tab_2 = Button(tab_2, text="Очистить лог", command=delete_Lab_2)
     btn_tab_2 = Button(tab_2, text="Выполнить", foreground="black", background="#00FFFF", command=draw_Lab_2)
 
     lbl_1_tab_2.pack(side=TOP, padx=5, pady=5)
@@ -329,7 +332,7 @@ def main():
     combo['values'] = ("Min", "Max")
 
     txt_tab_3 = scrolledtext.ScrolledText(txt_f_tab_3)
-    btn_del_tab_3 = Button(tab_3, text="Очистить лог", command=delete)
+    btn_del_tab_3 = Button(tab_3, text="Очистить лог", command=delete_Lab_3)
     btn_tab_3 = Button(tab_3, text="Выполнить", foreground="black", background="#00FFFF", command=draw_Lab_3)
 
     lbl_6_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
@@ -341,15 +344,15 @@ def main():
     lbl_2_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_3_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_7_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    lbl_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_5_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_1_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_2_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_3_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    txt_5_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)  # задержка в секундах
+    txt_5_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)  # шанс мутации
     combo.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    txt_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_tab_3.pack(padx=5, pady=5, fill=BOTH, expand=True)
 
