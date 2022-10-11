@@ -9,11 +9,9 @@ from tkinter.ttk import Combobox, Notebook, Style
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
-from PIL import Image, ImageTk, ImageSequence
-
 from Gradient import Make_Data_Lab_1, Funct_consider
 from SLSQP import Make_Data_Lab_2, kp
-from Rosenbrock_function import Make_Data_Lab_3, rosen, rosen2
+from Rosenbrock_function import Make_Data_Lab_3, rosen2
 from genetic_algorithm_l3 import GeneticAlgorithmL3
 
 
@@ -89,7 +87,7 @@ def main():
         x, y, z = Make_Data_Lab_3()
 
         if combo.get() == "Min":
-            txt_tab_3.insert(INSERT, "Что-то делаешь если Max")
+            txt_tab_3.insert(INSERT, "Что-то делаешь если Min")
         elif combo.get() == "Max:":
             txt_tab_3.insert(INSERT, "Что-то делаешь если Max")
 
@@ -97,74 +95,51 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        genetic = GeneticAlgorithmL3(rosen2,50, True) # Момент первый, нужно убрать ненужные точки, т.к. к нужной итерации все превращается в кашу
-        genetic.generate_start_population(5,5)
+        genetic = GeneticAlgorithmL3(rosen2, 50, True)
+        genetic.generate_start_population(5, 5)
         genetic.simulation()
+
         for j in range(100):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1, marker="s")
+            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                       marker="s")
         canvas.draw()
         window.update()
 
+        # Эти 4 строки ниже это считай удалить точку/точки
+        fig.clf()
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
         for i in range(50):
-            for j in range(100):       # Последовательность циклов и объекта genetic советую не менять
-                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1, marker="s")
+            for j in range(100):  # Последовательность циклов и объекта genetic советую не менять
+                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                           marker="s")
+            canvas.draw()
             window.update()
 
             genetic.select()
             genetic.mutation(i)
-            txt_tab_3.insert(INSERT, f"{i}) {genetic.statistic()[1]}")# Момент второй, нужно почистить статистику, чтобы был норм вывод
-                                                        #подсказка, тебе возвращается СЛОВАРЬ, попробуй перевести его в СПИСОК, так в теории будет легче
-            #time.sleep(0.1)          #Задержку я пока остановил, т.к. приходиться долго ждать из-за мешанины точек            
-            
+            gen_stat = list(genetic.statistic()[1])
+            txt_tab_3.insert(INSERT,
+                             f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
+                             f" ({round(gen_stat[1][2], 4)})\n")
+            time.sleep(0.1)
+
+            fig.clf()
+            ax = fig.add_subplot(projection='3d')
+            ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+            canvas.draw()
+
         for j in range(100):
             ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="red")
-        canvas.draw() # На данный момент я все переменные задаю в коде ручками, когда-нибудь потом исправлю
+        canvas.draw()  # На данный момент я все переменные задаю в коде ручками, когда-нибудь потом исправлю
         window.update()
-
-    #print(genetic.population)
-
-
-
 
         messagebox.showinfo('Уведомление', 'Готово')
 
     def delete():
         txt_tab_1.delete(1.0, END)
-
-    def play_gif():
-        img = Image.open(r"pic/pepe_clown.gif")
-
-        lbl_tab_4 = Label(tab_4)
-        lbl_tab_5 = Label(tab_5)
-        lbl_tab_6 = Label(tab_6)
-        lbl_tab_7 = Label(tab_7)
-        lbl_tab_8 = Label(tab_8)
-
-        lbl_tab_4.place(x=0, y=0)
-        lbl_tab_5.place(x=0, y=0)
-        lbl_tab_6.place(x=0, y=0)
-        lbl_tab_7.place(x=0, y=0)
-        lbl_tab_8.place(x=0, y=0)
-
-        for img in ImageSequence.Iterator(img):
-            img = ImageTk.PhotoImage(img)
-            lbl_tab_4.config(image=img)
-            lbl_tab_5.config(image=img)
-            lbl_tab_6.config(image=img)
-            lbl_tab_7.config(image=img)
-            lbl_tab_8.config(image=img)
-
-            tab_4.update()
-            tab_5.update()
-            tab_6.update()
-            tab_7.update()
-            tab_8.update()
-            time.sleep(0.1)
-        tab_4.after(0, play_gif)
-        tab_5.after(0, play_gif)
-        tab_6.after(0, play_gif)
-        tab_7.after(0, play_gif)
-        tab_8.after(0, play_gif)
 
     window = Tk()
 
@@ -367,8 +342,6 @@ def main():
     # Лаба 8
     tab_8 = Frame(tab_control)
     tab_control.add(tab_8, text="Lab_8")
-
-    #play_gif()
 
     tab_control.pack(side=RIGHT, fill=BOTH, expand=True)
     window.mainloop()
