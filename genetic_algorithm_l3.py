@@ -57,4 +57,4 @@ class GeneticAlgorithmL3:
                 pop[0] += (random() - 0.5) * ((self.generations - cur_gen) / self.generations)
             if random() < self.mut_chance:
                 pop[1] += (random() - 0.5) * ((self.generations - cur_gen) / self.generations)
-            pop[2] = self.func(pop[0],pop[1])
+            pop[2] = self.func(pop[0], pop[1])
