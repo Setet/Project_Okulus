@@ -3,7 +3,7 @@ import numpy as np
 import numpy
 
 
-def Make_Data_Lab_2():
+def make_data_lab_2():
     x = numpy.linspace(-10, 10, 100)
     y = numpy.linspace(-10, 10, 100)
 
@@ -22,7 +22,7 @@ def kp(x, y):
         x2 = x[1]
         return 2 * x1 * x1 + 3 * x2 * x2 + 4 * x1 * x2 - 6 * x1 - 3 * x2
 
-    def constraint(x): 
+    def constraint(x):
         x1 = x[0]
         x2 = x[1]
         return x1 + 2 * x2 - 2
