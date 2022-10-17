@@ -3,7 +3,7 @@ import numpy as np
 import numdifftools as nd
 
 
-def Make_Data_Lab_1():
+def make_data_lab_1():
     # Строим сетку в интервале от -10 до 10, имеющую 100 отсчетов по обоим координатам
     x = numpy.linspace(-10, 10, 100)
     y = numpy.linspace(-10, 10, 100)
@@ -16,7 +16,7 @@ def Make_Data_Lab_1():
     return xgrid, ygrid, z
 
 
-def Funct_consider(res_x, res_y, res_step, res_iterations):
+def funct_consider(res_x, res_y, res_step, res_iterations):
     himmelblaus_function = lambda x, y: numpy.power((numpy.power(x, 2) + y - 11), 2) + numpy.power(
         (x + numpy.power(y, 2) - 7), 2)
 
@@ -42,7 +42,7 @@ def partial_function(f___, input, pos, value):
 
 
 def gradient(function, input):
-    """Частная произвоздная по каждому из параметров функции f(т.е. градиент)"""
+    """Частная производная по каждому из параметров функции f(т.е. градиент)"""
 
     ret = np.empty(len(input))
     for i in range(len(input)):
