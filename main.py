@@ -13,6 +13,7 @@ from Gradient import make_data_lab_1, funct_consider
 from SLSQP import make_data_lab_2, kp
 from Rosenbrock_function import Make_Data_Lab_3, rosenbrock_2
 from genetic_algorithm_l3 import GeneticAlgorithmL3
+from pso import PSO
 
 
 def main():
@@ -170,33 +171,23 @@ def main():
 
         x, y, z = Make_Data_Lab_3()
 
-        pop_number = int(txt_1_tab_3.get())
-        iter_number = int(txt_2_tab_3.get())
-        survive = float(txt_3_tab_3.get())
-        mutation = float(txt_5_tab_3.get())
-        delay = txt_4_tab_3.get()
-
-        if combo.get() == "Min":
-            min_max = True
-        else:
-            min_max = False
+        iter_number = int(txt_1_tab_4.get())
+        partic_number = int(txt_2_tab_4.get())
+        positions = int(txt_3_tab_4.get())
+        fi_p = float(txt_4_tab_4.get())
+        fi_g = float(txt_5_tab_4.get())
+        delay = txt_6_tab_4.get()
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        genetic = GeneticAlgorithmL3(rosenbrock_2, iter_number, min_max, mutation, survive, pop_number)
-        genetic.generate_start_population(5, 5)
+        pso_obj = PSO(rosenbrock_2,partic_number, positions, 5.0,5.0,fi_p,fi_g)
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
-
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        for particle in pso_obj.get_2d():
+            ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
+        
+        ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
         canvas.draw()
         window.update()
 
@@ -206,24 +197,16 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        for i in range(50):
-            for j in range(pop_number):  # Последовательность циклов и объекта genetic советую не менять
-                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                           marker="s")
+        for i in range(iter_number):
+            pso_obj.next_iteration()
+            for particle in pso_obj.get_2d():
+                ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
-            genetic.select()
-            genetic.mutation(i)
+            ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
 
-            if min_max:
-                gen_stat = list(genetic.statistic()[1])
-            else:
-                gen_stat = list(genetic.statistic()[0])
-
-            ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
-
-            txt_tab_3.insert(INSERT,
-                             f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
-                             f" ({round(gen_stat[1][2], 4)})\n")
+            txt_tab_4.insert(INSERT,
+                             f"{i+1}) ({round(pso_obj.gbest[0], 8)}) ({round(pso_obj.gbest[1], 8)}) = "
+                             f" ({round(pso_obj.gbest[2], 8)})\n")
 
             canvas.draw()
             window.update()
@@ -234,15 +217,10 @@ def main():
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
-
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        for particle in pso_obj.get_2d():
+            ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
+        
+        ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
 
         canvas.draw()
         window.update()
@@ -458,7 +436,7 @@ def main():
 
     lbl_1_tab_4 = Label(left_f_tab_4, text="Количество итераций")
     lbl_2_tab_4 = Label(left_f_tab_4, text="Количество частиц")
-    lbl_3_tab_4 = Label(left_f_tab_4, text="Запаска")
+    lbl_3_tab_4 = Label(left_f_tab_4, text="Количество позиций")
     lbl_4_tab_4 = Label(left_f_tab_4, text="Коэффициент g")
     lbl_5_tab_4 = Label(left_f_tab_4, text="Задержка в секундах")
     lbl_6_tab_4 = Label(tab_4, text="Функция чего-то + кого-то")

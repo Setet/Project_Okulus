@@ -45,8 +45,10 @@ class PSO:
         y = particle[1] + velocity[1]
 
         return [x, y, self.func(x,y)]
-    
 
+    def get_2d(self):
+        return [elem for twod in self.particles for elem in twod]
+    
     
     def next_iteration(self):
         for i in range(self.population):
@@ -56,10 +58,3 @@ class PSO:
                 self.particles[i][j] = PSO.update_position(self, self.velocity[i][j], self.particles[i][j])
 
         self.gbest = min([elem for twod in self.particles for elem in twod],key=itemgetter(2))
-    
-test_PSO = PSO(fitness_function,100,3, 5.0,5.0,2,3)
-print(test_PSO.gbest)
-for i in range(50):
-    test_PSO.next_iteration()
-    print(f"{i+1} {test_PSO.gbest}")
-
