@@ -89,8 +89,8 @@ def main():
         pop_number = int(txt_1_tab_3.get())
         iter_number = int(txt_2_tab_3.get())
         survive = float(txt_3_tab_3.get())
-        mutation = float(txt_5_tab_3.get())
-        delay = txt_4_tab_3.get()
+        mutation = float(txt_4_tab_3.get())
+        delay = txt_5_tab_3.get()
 
         if combo.get() == "Min":
             min_max = True
