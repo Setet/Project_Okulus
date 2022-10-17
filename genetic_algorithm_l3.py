@@ -18,11 +18,6 @@ class GeneticAlgorithmL3:
             self.population[i] = [po_x, po_y, self.func(po_x, po_y)]  # Создание начальной популяции
             # 2 гена (x, y) и значение фитнес-функции(z)
 
-    def simulation(self):
-        for agent in self.population.values():
-            agent[2] = self.func(agent[0], agent[1])  # Вычисляем значение функции(z) по (x, y)
-        return self.population
-
     def statistic(self):
         return [max(self.population.items(), key=lambda item: item[1][2]),
                 min(self.population.items(), key=lambda item: item[1][2])]
