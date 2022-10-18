@@ -173,7 +173,6 @@ def main():
 
         iter_number = int(txt_1_tab_4.get())
         partic_number = int(txt_2_tab_4.get())
-        positions = int(txt_3_tab_4.get())
         fi_p = float(txt_4_tab_4.get())
         fi_g = float(txt_5_tab_4.get())
         delay = txt_6_tab_4.get()
@@ -182,11 +181,11 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        pso_obj = PSO(rosenbrock_2,partic_number, positions, 5.0,5.0,fi_p,fi_g)
+        pso_obj = PSO(rosenbrock_2, partic_number, 5.0, 5.0, fi_p, fi_g)
 
-        for particle in pso_obj.get_2d():
+        for particle in pso_obj.particles:
             ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
-        
+
         ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
         canvas.draw()
         window.update()
@@ -199,13 +198,13 @@ def main():
 
         for i in range(iter_number):
             pso_obj.next_iteration()
-            for particle in pso_obj.get_2d():
+            for particle in pso_obj.particles:
                 ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
             ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
 
             txt_tab_4.insert(INSERT,
-                             f"{i+1}) ({round(pso_obj.gbest[0], 8)}) ({round(pso_obj.gbest[1], 8)}) = "
+                             f"{i + 1}) ({round(pso_obj.gbest[0], 8)}) ({round(pso_obj.gbest[1], 8)}) = "
                              f" ({round(pso_obj.gbest[2], 8)})\n")
 
             canvas.draw()
@@ -217,9 +216,9 @@ def main():
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for particle in pso_obj.get_2d():
+        for particle in pso_obj.particles:
             ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
-        
+
         ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
 
         canvas.draw()
@@ -436,15 +435,13 @@ def main():
 
     lbl_1_tab_4 = Label(left_f_tab_4, text="Количество итераций")
     lbl_2_tab_4 = Label(left_f_tab_4, text="Количество частиц")
-    lbl_3_tab_4 = Label(left_f_tab_4, text="Количество позиций")
     lbl_4_tab_4 = Label(left_f_tab_4, text="Коэффициент g")
     lbl_5_tab_4 = Label(left_f_tab_4, text="Задержка в секундах")
-    lbl_6_tab_4 = Label(tab_4, text="Функция чего-то + кого-то")
+    lbl_6_tab_4 = Label(tab_4, text="Функция Розенброка")
     lbl_7_tab_4 = Label(left_f_tab_4, text="Коэффициент p")
 
     txt_1_tab_4 = Entry(right_f_tab_4)
     txt_2_tab_4 = Entry(right_f_tab_4)
-    txt_3_tab_4 = Entry(right_f_tab_4)
     txt_4_tab_4 = Entry(right_f_tab_4)
     txt_5_tab_4 = Entry(right_f_tab_4)
     txt_6_tab_4 = Entry(right_f_tab_4)
@@ -460,14 +457,12 @@ def main():
 
     lbl_1_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_2_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    lbl_3_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_7_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_4_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_5_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_1_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_2_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    txt_3_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_4_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_5_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_6_tab_4.pack(side=TOP, padx=5, pady=5, fill=BOTH)
