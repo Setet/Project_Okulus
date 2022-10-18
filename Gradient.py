@@ -9,11 +9,11 @@ def make_data_lab_1():
     y = numpy.linspace(-10, 10, 100)
 
     # Создаем двумерную матрицу-сетку
-    xgrid, ygrid = numpy.meshgrid(x, y)
+    x_grid, y_grid = numpy.meshgrid(x, y)
 
     # В узлах рассчитываем значение функции
-    z = numpy.power((numpy.power(xgrid, 2) + ygrid - 11), 2) + numpy.power((xgrid + numpy.power(ygrid, 2) - 7), 2)
-    return xgrid, ygrid, z
+    z = numpy.power((numpy.power(x_grid, 2) + y_grid - 11), 2) + numpy.power((x_grid + numpy.power(y_grid, 2) - 7), 2)
+    return x_grid, y_grid, z
 
 
 def funct_consider(res_x, res_y, res_step, res_iterations):
@@ -46,8 +46,8 @@ def gradient(function, input):
 
     ret = np.empty(len(input))
     for i in range(len(input)):
-        fg = lambda x: partial_function(function, input, i, x)
-        ret[i] = nd.Derivative(fg)(input[i])
+        f_g = lambda x: partial_function(function, input, i, x)
+        ret[i] = nd.Derivative(f_g)(input[i])
     return ret
 
 
@@ -55,7 +55,7 @@ def next_point(x, y, gx, gy, step) -> tuple:
     return x - step * gx, y - step * gy
 
 
-def gradient_descent(function, x0, y0, tk, M):
+def gradient_descent(function, x0, y0, tk, m):
     yield x0, y0, 0, function(x0, y0)
 
     e1 = 0.0001
@@ -68,7 +68,7 @@ def gradient_descent(function, x0, y0, tk, M):
         if np.linalg.norm((gx, gy)) < e1:  # Шаг 4. Проверить выполнение критерия окончания
             break
 
-        if k >= M:  # Шаг 5
+        if k >= m:  # Шаг 5
             break
 
         x1, y1 = next_point(x0, y0, gx, gy, tk)  # 7
@@ -81,7 +81,6 @@ def gradient_descent(function, x0, y0, tk, M):
             f0 = function(x0, y0)
 
         if np.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2) < e2 and abs(f1 - f0) < e2:  # 9
-            x0, y0 = x1, y1
             break
         else:
             k += 1

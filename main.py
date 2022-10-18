@@ -11,7 +11,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 
 from Gradient import make_data_lab_1, funct_consider
 from SLSQP import make_data_lab_2, kp
-from Rosenbrock_function import Make_Data_Lab_3, rosenbrock_2
+from Rosenbrock_function import make_data_lab_3, rosenbrock_2
 from genetic_algorithm_l3 import GeneticAlgorithmL3
 from pso import PSO
 
@@ -85,7 +85,7 @@ def main():
     def draw_lab_3():
         fig.clf()
 
-        x, y, z = Make_Data_Lab_3()
+        x, y, z = make_data_lab_3()
 
         pop_number = int(txt_1_tab_3.get())
         iter_number = int(txt_2_tab_3.get())
@@ -169,7 +169,7 @@ def main():
     def draw_lab_4():
         fig.clf()
 
-        x, y, z = Make_Data_Lab_3()
+        x, y, z = make_data_lab_3()
 
         iter_number = int(txt_1_tab_4.get())
         partic_number = int(txt_2_tab_4.get())
@@ -201,7 +201,7 @@ def main():
             for particle in pso_obj.particles:
                 ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
-            ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
+            ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
 
             txt_tab_4.insert(INSERT,
                              f"{i + 1}) ({round(pso_obj.gbest[0], 8)}) ({round(pso_obj.gbest[1], 8)}) = "
