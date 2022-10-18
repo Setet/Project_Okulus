@@ -11,7 +11,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 
 from Gradient import make_data_lab_1, funct_consider
 from SLSQP import make_data_lab_2, kp
-from Rosenbrock_function import Make_Data_Lab_3, rosenbrock_2
+from Rosenbrock_function import make_data_lab_3, rosenbrock_2
 from genetic_algorithm_l3 import GeneticAlgorithmL3
 from pso import PSO
 
@@ -85,7 +85,7 @@ def main():
     def draw_lab_3():
         fig.clf()
 
-        x, y, z = Make_Data_Lab_3()
+        x, y, z = make_data_lab_3()
 
         pop_number = int(txt_1_tab_3.get())
         iter_number = int(txt_2_tab_3.get())
@@ -169,10 +169,10 @@ def main():
     def draw_lab_4():
         fig.clf()
 
-        x, y, z = Make_Data_Lab_3()
+        x, y, z = make_data_lab_3()
 
         iter_number = int(txt_1_tab_4.get())
-        partic_number = int(txt_2_tab_4.get())
+        particles_number = int(txt_2_tab_4.get())
         positions = int(txt_3_tab_4.get())
         fi_p = float(txt_4_tab_4.get())
         fi_g = float(txt_5_tab_4.get())
@@ -182,12 +182,12 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        pso_obj = PSO(rosenbrock_2,partic_number, positions, 5.0,5.0,fi_p,fi_g)
+        pso_obj = PSO(rosenbrock_2, particles_number, positions, 5.0, 5.0, fi_p, fi_g)
 
         for particle in pso_obj.get_2d():
             ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
-        
-        ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
+
+        ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
         canvas.draw()
         window.update()
 
@@ -202,11 +202,11 @@ def main():
             for particle in pso_obj.get_2d():
                 ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
-            ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
+            ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
 
             txt_tab_4.insert(INSERT,
-                             f"{i+1}) ({round(pso_obj.gbest[0], 8)}) ({round(pso_obj.gbest[1], 8)}) = "
-                             f" ({round(pso_obj.gbest[2], 8)})\n")
+                             f"{i + 1}) ({round(pso_obj.g_best[0], 8)}) ({round(pso_obj.g_best[1], 8)}) = "
+                             f" ({round(pso_obj.g_best[2], 8)})\n")
 
             canvas.draw()
             window.update()
@@ -219,8 +219,8 @@ def main():
 
         for particle in pso_obj.get_2d():
             ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
-        
-        ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
+
+        ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
 
         canvas.draw()
         window.update()
