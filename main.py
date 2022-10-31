@@ -6,8 +6,12 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.ttk import Combobox, Notebook, Style
 
+import matplotlib
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.lines import Line2D
+from matplotlib.patches import Rectangle
 
 from Gradient import make_data_lab_1, funct_consider
 from SLSQP import make_data_lab_2, kp
@@ -172,7 +176,7 @@ def main():
         x, y, z = make_data_lab_3()
 
         iter_number = int(txt_1_tab_4.get())
-        partic_number = int(txt_2_tab_4.get())
+        particle_number = int(txt_2_tab_4.get())
         fi_p = float(txt_4_tab_4.get())
         fi_g = float(txt_5_tab_4.get())
         delay = txt_6_tab_4.get()
@@ -181,12 +185,12 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        pso_obj = PSO(rosenbrock_2, partic_number, 5.0, 5.0, fi_p, fi_g)
+        pso_obj = PSO(rosenbrock_2, particle_number, 5.0, 5.0, fi_p, fi_g)
 
         for particle in pso_obj.particles:
             ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
-        ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
+        ax.scatter(pso_obj.generation_best[0], pso_obj.generation_best[1], pso_obj.generation_best[2], c="red")
         canvas.draw()
         window.update()
 
@@ -204,8 +208,9 @@ def main():
             ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
 
             txt_tab_4.insert(INSERT,
-                             f"{i + 1}) ({round(pso_obj.gbest[0], 8)}) ({round(pso_obj.gbest[1], 8)}) = "
-                             f" ({round(pso_obj.gbest[2], 8)})\n")
+                             f"{i + 1}) ({round(pso_obj.generation_best[0], 8)})"
+                             f" ({round(pso_obj.generation_best[1], 8)}) = "
+                             f" ({round(pso_obj.generation_best[2], 8)})\n")
 
             canvas.draw()
             window.update()
@@ -219,12 +224,85 @@ def main():
         for particle in pso_obj.particles:
             ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
-        ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
+        ax.scatter(pso_obj.generation_best[0], pso_obj.generation_best[1], pso_obj.generation_best[2], c="red")
 
         canvas.draw()
         window.update()
 
         messagebox.showinfo('Уведомление', 'Готово')
+
+    def draw_lab_5():
+        fig.clf()
+
+        x, y, z = make_data_lab_3()
+
+        iter_number = int(txt_1_tab_4.get())
+        particle_number = int(txt_2_tab_4.get())
+        fi_p = float(txt_4_tab_4.get())
+        fi_g = float(txt_5_tab_4.get())
+        delay = txt_6_tab_4.get()
+
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        pso_obj = PSO(rosenbrock_2, particle_number, 5.0, 5.0, fi_p, fi_g)
+
+        for particle in pso_obj.particles:
+            ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
+
+        ax.scatter(pso_obj.generation_best[0], pso_obj.generation_best[1], pso_obj.generation_best[2], c="red")
+        canvas.draw()
+        window.update()
+
+        # Эти 4 строки ниже это считай удалить точку/точки
+        fig.clf()
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        for i in range(iter_number):
+            pso_obj.next_iteration()
+            for particle in pso_obj.particles:
+                ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
+
+            ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
+
+            txt_tab_4.insert(INSERT,
+                             f"{i + 1}) ({round(pso_obj.generation_best[0], 8)})"
+                             f" ({round(pso_obj.generation_best[1], 8)}) = "
+                             f" ({round(pso_obj.generation_best[2], 8)})\n")
+
+            canvas.draw()
+            window.update()
+            time.sleep(float(delay))
+
+            fig.clf()
+            ax = fig.add_subplot(projection='3d')
+            ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+            canvas.draw()
+
+        for particle in pso_obj.particles:
+            ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
+
+        ax.scatter(pso_obj.generation_best[0], pso_obj.generation_best[1], pso_obj.generation_best[2], c="red")
+
+        canvas.draw()
+        window.update()
+
+        messagebox.showinfo('Уведомление', 'Готово')
+
+    def draw_square():
+        fig.clf()
+
+        ax = fig.add_subplot(projection='3d')
+
+        x = [1, 1, 2, 2, 1]
+        y = [0, 0, 0, 0, 0]
+        z = [0, 1, 1, 0, 0]
+
+        ax.plot(x, y, z, label='parametric curve')
+        canvas.draw()
 
     def delete_lab_1():
         txt_tab_1.delete(1.0, END)
@@ -236,6 +314,9 @@ def main():
         txt_tab_3.delete(1.0, END)
 
     def delete_lab_4():
+        txt_tab_4.delete(1.0, END)
+
+    def delete_lab_5():
         txt_tab_4.delete(1.0, END)
 
     window = Tk()
@@ -476,6 +557,60 @@ def main():
     # Лаба 5
     tab_5 = Frame(tab_control)
     tab_control.add(tab_5, text="Lab_5")
+
+    main_f_tab_5 = LabelFrame(tab_5, text="Параметры")
+    left_f_tab_5 = Frame(main_f_tab_5)
+    right_f_tab_5 = Frame(main_f_tab_5)
+    txt_f_tab_5 = LabelFrame(tab_5, text="Консоль лог")
+
+    lbl_1_tab_5 = Label(left_f_tab_5, text="a 0,0")
+    lbl_2_tab_5 = Label(left_f_tab_5, text="a 0,1")
+    lbl_3_tab_5 = Label(left_f_tab_5, text="a 1,0")
+    lbl_4_tab_5 = Label(left_f_tab_5, text="Задержка в секундах")
+    lbl_5_tab_5 = Label(tab_5, text="ХЗ")
+    lbl_6_tab_5 = Label(left_f_tab_5, text="a 1,1")
+    lbl_7_tab_5 = Label(left_f_tab_5, text="Выборы 2022")
+
+    txt_1_tab_5 = Entry(right_f_tab_5)
+    txt_2_tab_5 = Entry(right_f_tab_5)
+    txt_3_tab_5 = Entry(right_f_tab_5)
+    txt_4_tab_5 = Entry(right_f_tab_5)
+    txt_5_tab_5 = Entry(right_f_tab_5)
+
+    combo = Combobox(right_f_tab_5)
+    combo['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
+
+    txt_tab_5 = scrolledtext.ScrolledText(txt_f_tab_5)
+    btn_del_tab_5 = Button(tab_5, text="Очистить лог", command=delete_lab_5)
+    btn_tab_5 = Button(tab_5, text="Выполнить", foreground="black", background="#00FFFF", command=draw_lab_5)
+    btn_draw_square = Button(left_f_tab_5, text="Квадрат", command=draw_square)
+
+    lbl_5_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    main_f_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
+    left_f_tab_5.pack(side=LEFT, fill=BOTH, expand=True)
+    right_f_tab_5.pack(side=RIGHT, fill=BOTH, expand=True)
+
+    lbl_1_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_2_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_3_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_6_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_4_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_7_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    btn_draw_square.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_1_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_2_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_3_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_4_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_5_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    combo.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_tab_5.pack(padx=5, pady=5, fill=BOTH, expand=True)
+
+    btn_tab_5.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    txt_f_tab_5.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    btn_del_tab_5.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
 
     # Лаба 6
     tab_6 = Frame(tab_control)

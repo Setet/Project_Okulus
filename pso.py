@@ -28,16 +28,16 @@ class PSO:
         self.nostalgia = self.particles.copy()
 
         self.velocity = [[0.0 for _ in range(2)] for _ in range(self.population)]
-        self.gbest = min(self.particles, key=itemgetter(2))
+        self.generation_best = min(self.particles, key=itemgetter(2))
 
-    def update_velocity(self, velocity, particle, pbest) -> list:
+    def update_velocity(self, velocity, particle, point_best) -> list:
         new_vel = list()
         for i in range(2):
             r1 = random.random()
             r2 = random.random()
 
-            new_vel.append(self.xi * (velocity[i] + self.fi_p * r1 * (pbest[i] - particle[i]) + self.fi_g * r2 * (
-                        self.gbest[i] - particle[i])))
+            new_vel.append(self.xi * (velocity[i] + self.fi_p * r1 * (point_best[i] - particle[i]) + self.fi_g * r2 * (
+                    self.generation_best[i] - particle[i])))
         return new_vel
 
     def update_position(self, velocity, particle):
@@ -50,12 +50,12 @@ class PSO:
         for i in range(self.population):
 
             if self.nostalgia[i][2] < self.particles[i][2]:
-                pbest = self.nostalgia[i]
+                point_best = self.nostalgia[i]
             else:
                 self.nostalgia[i] = self.particles[i]
-                pbest = self.particles[i]
+                point_best = self.particles[i]
 
-            self.velocity[i] = PSO.update_velocity(self, self.velocity[i], self.particles[i], pbest)
+            self.velocity[i] = PSO.update_velocity(self, self.velocity[i], self.particles[i], point_best)
             self.particles[i] = PSO.update_position(self, self.velocity[i], self.particles[i])
 
-        self.gbest = min(self.particles, key=itemgetter(2))
+        self.generation_best = min(self.particles, key=itemgetter(2))
