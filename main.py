@@ -18,6 +18,7 @@ from SLSQP import make_data_lab_2, kp
 from Rosenbrock_function import make_data_lab_3, rosenbrock_2
 from genetic_algorithm_l3 import GeneticAlgorithmL3
 from pso import PSO
+from bees import Bees
 
 
 def main():
@@ -205,7 +206,7 @@ def main():
             for particle in pso_obj.particles:
                 ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
-            ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
+            ax.scatter(pso_obj.gbest[0], pso_obj.gbest[1], pso_obj.gbest[2], c="red")
 
             txt_tab_4.insert(INSERT,
                              f"{i + 1}) ({round(pso_obj.generation_best[0], 8)})"

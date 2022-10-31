@@ -3,10 +3,6 @@ import numpy as np
 from operator import itemgetter
 
 
-def fitness_function(x, y):
-    return (1.0 - x) ** 2 + 100.0 * (y - x * x) ** 2
-
-
 class PSO:
     def __init__(self, func, population, position_x, position_y, fi_p, fi_g):
         self.func = func

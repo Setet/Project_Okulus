@@ -1,5 +1,4 @@
 import numpy as np
-import numpy
 
 
 def rosenbrock(x):
@@ -11,10 +10,10 @@ def rosenbrock_2(x, y):
 
 
 def make_data_lab_3():
-    x = numpy.linspace(-5, 5, 100)
-    y = numpy.linspace(-5, 5, 100)
+    x = np.linspace(-5, 5, 100)
+    y = np.linspace(-5, 5, 100)
 
-    x_grid, y_grid = numpy.meshgrid(x, y)
+    x_grid, y_grid = np.meshgrid(x, y)
 
     z = rosenbrock(np.array([x_grid, y_grid]))
     return x_grid, y_grid, z
