@@ -237,22 +237,32 @@ def main():
 
         x, y, z = make_data_lab_3()
 
-        iter_number = int(txt_1_tab_4.get())
-        particle_number = int(txt_2_tab_4.get())
-        fi_p = float(txt_4_tab_4.get())
-        fi_g = float(txt_5_tab_4.get())
-        delay = txt_6_tab_4.get()
+        iter_number = int(txt_1_tab_5.get())
+        scouts_number = int(txt_2_tab_5.get())
+        #elite = int(txt_3_tab_5.get())
+        #perspective = int(txt_4_tab_5.get())
+        #b_to_leet
+        #b_to_persp
+        delay = txt_5_tab_5.get()
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        pso_obj = PSO(rosenbrock_2, particle_number, 5.0, 5.0, fi_p, fi_g)
+        bees_swarm = Bees(rosenbrock_2,scouts_number,2,3,10,8,1,5,5 )
 
-        for particle in pso_obj.particles:
-            ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
+        for scout in bees_swarm.scouts:
+            ax.scatter(scout[0], scout[1], scout[2], c="blue", s=1, marker="s")
 
-        ax.scatter(pso_obj.generation_best[0], pso_obj.generation_best[1], pso_obj.generation_best[2], c="red")
+        bees_swarm.research_reports()
+        bees_swarm.selected_search(1)
+
+        for worker in bees_swarm.workers:
+            ax.scatter(worker[0],worker[1],worker[2], c="black", s=1, marker="s")
+
+        b = bees_swarm.get_best()
+        ax.scatter(b[0], b[1], b[2], c="red")
+
         canvas.draw()
         window.update()
 
@@ -263,16 +273,25 @@ def main():
         canvas.draw()
 
         for i in range(iter_number):
-            pso_obj.next_iteration()
-            for particle in pso_obj.particles:
-                ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
 
-            ax.scatter(pso_obj.g_best[0], pso_obj.g_best[1], pso_obj.g_best[2], c="red")
+            bees_swarm.send_scouts()
+            for scout in bees_swarm.scouts:
+                ax.scatter(scout[0], scout[1], scout[2], c="blue", s=1, marker="s")
 
-            txt_tab_4.insert(INSERT,
-                             f"{i + 1}) ({round(pso_obj.generation_best[0], 8)})"
-                             f" ({round(pso_obj.generation_best[1], 8)}) = "
-                             f" ({round(pso_obj.generation_best[2], 8)})\n")
+            bees_swarm.research_reports()
+            bees_swarm.selected_search(1/(i+1))
+
+            for worker in bees_swarm.workers:
+                ax.scatter(worker[0],worker[1],worker[2], c="black", s=1, marker="s")
+
+            b = bees_swarm.get_best()
+            ax.scatter(b[0], b[1], b[2], c="red")
+
+
+            txt_tab_5.insert(INSERT,
+                             f"{i + 1}) ({round(b[0], 8)})"
+                             f" ({round(b[1], 8)}) = "
+                             f" ({round(b[2], 8)})\n")
 
             canvas.draw()
             window.update()
@@ -283,10 +302,20 @@ def main():
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for particle in pso_obj.particles:
-            ax.scatter(particle[0], particle[1], particle[2], c="black", s=1, marker="s")
+        for scout in bees_swarm.scouts:
+            ax.scatter(scout[0], scout[1], scout[2], c="blue", s=1, marker="s")
+        
+        for worker in bees_swarm.workers:
+                ax.scatter(worker[0],worker[1],worker[2], c="black", s=1, marker="s")
 
-        ax.scatter(pso_obj.generation_best[0], pso_obj.generation_best[1], pso_obj.generation_best[2], c="red")
+        b = bees_swarm.get_best()
+        ax.scatter(b[0], b[1], b[2], c="red")
+
+        x = [1, 1, 2, 2, 1]
+        y = [0, 0, 0, 0, 0]
+        z = [0, 1, 1, 0, 0]
+
+        ax.plot(x, y, z, label='parametric curve')
 
         canvas.draw()
         window.update()
@@ -294,9 +323,6 @@ def main():
         messagebox.showinfo('Уведомление', 'Готово')
 
     def draw_square():
-        fig.clf()
-
-        ax = fig.add_subplot(projection='3d')
 
         x = [1, 1, 2, 2, 1]
         y = [0, 0, 0, 0, 0]
@@ -318,7 +344,7 @@ def main():
         txt_tab_4.delete(1.0, END)
 
     def delete_lab_5():
-        txt_tab_4.delete(1.0, END)
+        txt_tab_5.delete(1.0, END)
 
     window = Tk()
 

@@ -63,15 +63,3 @@ class Bees:
 
 # 1) init -> research_reports -> selected_search -> get_best -> 
 # 2 - ...) send_scouts -> research_reports -> selected_search -> get_best -> ...
-
-test_swarm = Bees(rosenbrock_2,12,2,4,10,8,1,5,5)
-
-test_swarm.research_reports()
-test_swarm.selected_search(1)
-print(test_swarm.get_best())
-
-for i in range(50):
-    test_swarm.send_scouts()
-    test_swarm.research_reports()
-    test_swarm.selected_search(1/(i+1))
-    print(test_swarm.get_best())
