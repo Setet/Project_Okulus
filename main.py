@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import tkinter
 import time
 import sys
@@ -13,6 +15,7 @@ from Rosenbrock_function import make_data_lab_3, rosenbrock_2
 from genetic_algorithm_l3 import GeneticAlgorithmL3
 from pso import PSO
 from bees import Bees
+from functions import *
 
 
 def main():
@@ -493,34 +496,39 @@ def main():
     def draw_lab_5():
         fig.clf()
 
-        if combo.get() == "Химмельблау":
-            print("1")
-        elif combo.get() == "Розенброка":
-            print("2")
-        else:
-            print("3")
-
-        x, y, z = make_data_lab_3()
-
         iter_number = int(txt_1_tab_5.get())
         scouts_number = int(txt_2_tab_5.get())
-        # elite = int(txt_3_tab_5.get())
-        # perspective = int(txt_4_tab_5.get())
-        # b_to_leet = txt_5_tab_5.get()
-        # b_to_persp = txt_6_tab_5.get()
+        elite = int(txt_3_tab_5.get())
+        perspective = int(txt_4_tab_5.get())
+        b_to_leet = int(txt_5_tab_5.get())
+        b_to_persp = int(txt_6_tab_5.get())
+        pos_x = int(txt_8_tab_5.get())
+        pos_y = int(txt_9_tab_5.get())
         delay = txt_7_tab_5.get()
+
+        if combo_5.get() == "Химмельблау":
+            func = himmelblau_2
+            x, y, z = make_data_himmelblau(pos_x, pos_y)
+        elif combo_5.get() == "Розенброка":
+            func = rosenbrock_2
+            x, y, z = make_data_rosenbrock(pos_x, pos_y)
+        else:
+            func = rastrigin_2
+            x, y, z = make_data_rastrigin(pos_x, pos_y)
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        bees_swarm = Bees(rosenbrock_2, scouts_number, 2, 3, 10, 8, 1, 5, 5)
+        bees_swarm = Bees(func, scouts_number, elite, perspective, b_to_leet, b_to_persp, 1, pos_x, pos_y)
 
         for scout in bees_swarm.scouts:
             ax.scatter(scout[0], scout[1], scout[2], c="blue", s=1, marker="s")
 
         bees_swarm.research_reports()
         bees_swarm.selected_search(1)
+        
+        
 
         for worker in bees_swarm.workers:
             ax.scatter(worker[0], worker[1], worker[2], c="black", s=1, marker="s")
@@ -544,6 +552,12 @@ def main():
 
             bees_swarm.research_reports()
             bees_swarm.selected_search(1 / (i + 1))
+
+            for sec in bees_swarm.selected:
+                rx, ry, rz = make_square(sec[0],sec[1], 1/(i + 1),func)
+                ax.plot(rx, ry, rz, label='parametric curve')
+            canvas.draw()
+            window.update()
 
             for worker in bees_swarm.workers:
                 ax.scatter(worker[0], worker[1], worker[2], c="black", s=1, marker="s")
@@ -574,23 +588,21 @@ def main():
         b = bees_swarm.get_best()
         ax.scatter(b[0], b[1], b[2], c="red")
 
-        result_1 = [int(item) for item in txt_8_tab_5.get().split(",")]  # x
-        result_2 = [int(item) for item in txt_9_tab_5.get().split(",")]  # y
-        result_3 = [int(item) for item in txt_10_tab_5.get().split(",")]  # z
-
-        result_1.append(result_1[0])
-        result_2.append(result_2[0])
-        result_3.append(result_3[0])
-
-        ax.plot(result_1, result_2, result_3, label='parametric curve')
-
         canvas.draw()
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
         window.update()
 
         messagebox.showinfo('Уведомление', 'Готово')
+    
+    def make_square(x,y,rad, func):
+        r_1 = [x-rad, x-rad, x+rad, x+rad]  # x
+        r_2 = [y-rad, y+rad, y+rad, y-rad]  # y
+        r_3 = [func(r_1[0], r_2[0]), func(r_1[1], r_2[1]), func(r_1[2], r_2[2]), func(r_1[3], r_2[3])]  # z
+
+        r_1.append(r_1[0])
+        r_2.append(r_2[0])
+        r_3.append(r_3[0])
+
+        return r_1, r_2, r_3
 
     def delete_lab_5():
         txt_tab_5.delete(1.0, END)
@@ -603,19 +615,18 @@ def main():
     right_f_tab_5 = Frame(main_f_tab_5)
     txt_f_tab_5 = LabelFrame(tab_5, text="Консоль лог")
 
-    lbl_5_tab_5 = Label(tab_5, text="ХЗ")
-    lbl_1_tab_5 = Label(left_f_tab_5, text="iter_number")
-    lbl_2_tab_5 = Label(left_f_tab_5, text="scouts_number")
-    lbl_3_tab_5 = Label(left_f_tab_5, text="elite")
+    lbl_5_tab_5 = Label(tab_5, text="Пчелиный алгоритм")
+    lbl_1_tab_5 = Label(left_f_tab_5, text="Количество итераций")
+    lbl_2_tab_5 = Label(left_f_tab_5, text="Количество разведчиков")
+    lbl_3_tab_5 = Label(left_f_tab_5, text="Элитных участков")
     lbl_4_tab_5 = Label(left_f_tab_5, text="Задержка в секундах")
-    lbl_6_tab_5 = Label(left_f_tab_5, text="perspective")
+    lbl_6_tab_5 = Label(left_f_tab_5, text="Перспективных участков")
     lbl_7_tab_5 = Label(left_f_tab_5, text="Выборы 2022")
-    lbl_8_tab_5 = Label(left_f_tab_5, text="b_to_leet")
-    lbl_9_tab_5 = Label(left_f_tab_5, text="b_to_persp")
+    lbl_8_tab_5 = Label(left_f_tab_5, text="Рабочих на элитных участках")
+    lbl_9_tab_5 = Label(left_f_tab_5, text="Рабочих на перспективных участках")
 
     lbl_10_tab_5 = Label(left_f_tab_5, text="X")
     lbl_11_tab_5 = Label(left_f_tab_5, text="Y")
-    lbl_12_tab_5 = Label(left_f_tab_5, text="Z")
 
     txt_1_tab_5 = Entry(right_f_tab_5)
     txt_2_tab_5 = Entry(right_f_tab_5)
@@ -628,9 +639,9 @@ def main():
     txt_8_tab_5 = Entry(right_f_tab_5)
     txt_9_tab_5 = Entry(right_f_tab_5)
     txt_10_tab_5 = Entry(right_f_tab_5)
-
-    combo = Combobox(right_f_tab_5)
-    combo['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
+    
+    combo_5 = Combobox(right_f_tab_5)
+    combo_5['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
 
     txt_tab_5 = scrolledtext.ScrolledText(txt_f_tab_5)
     btn_del_tab_5 = Button(tab_5, text="Очистить лог", command=delete_lab_5)
@@ -651,7 +662,6 @@ def main():
 
     lbl_10_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_11_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    lbl_12_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     lbl_7_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
@@ -665,9 +675,8 @@ def main():
 
     txt_8_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_9_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    txt_10_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
-    combo.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    combo_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_tab_5.pack(padx=5, pady=5, fill=BOTH, expand=True)
 
