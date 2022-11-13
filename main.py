@@ -241,7 +241,7 @@ def main():
         mutation = float(txt_4_tab_3.get())
         delay = txt_5_tab_3.get()
 
-        if combo.get() == "Min":
+        if combo_tab_3.get() == "Min":
             min_max = True
         else:
             min_max = False
@@ -342,8 +342,8 @@ def main():
     txt_4_tab_3 = Entry(right_f_tab_3)
     txt_5_tab_3 = Entry(right_f_tab_3)
 
-    combo = Combobox(right_f_tab_3)
-    combo['values'] = ("Min", "Max")
+    combo_tab_3 = Combobox(right_f_tab_3)
+    combo_tab_3['values'] = ("Min", "Max")
 
     txt_tab_3 = scrolledtext.ScrolledText(txt_f_tab_3)
     btn_del_tab_3 = Button(tab_3, text="Очистить лог", command=delete_lab_3)
@@ -366,7 +366,7 @@ def main():
     txt_3_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_4_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)  # задержка в секундах
     txt_5_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)  # шанс мутации
-    combo.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    combo_tab_3.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_tab_3.pack(padx=5, pady=5, fill=BOTH, expand=True)
 
@@ -506,10 +506,10 @@ def main():
         pos_y = int(txt_9_tab_5.get())
         delay = txt_7_tab_5.get()
 
-        if combo_5.get() == "Химмельблау":
+        if combo_tab_5.get() == "Химмельблау":
             func = himmelblau_2
             x, y, z = make_data_himmelblau(pos_x, pos_y)
-        elif combo_5.get() == "Розенброка":
+        elif combo_tab_5.get() == "Розенброка":
             func = rosenbrock_2
             x, y, z = make_data_rosenbrock(pos_x, pos_y)
         else:
@@ -527,8 +527,6 @@ def main():
 
         bees_swarm.research_reports()
         bees_swarm.selected_search(1)
-        
-        
 
         for worker in bees_swarm.workers:
             ax.scatter(worker[0], worker[1], worker[2], c="black", s=1, marker="s")
@@ -554,7 +552,7 @@ def main():
             bees_swarm.selected_search(1 / (i + 1))
 
             for sec in bees_swarm.selected:
-                rx, ry, rz = make_square(sec[0],sec[1], 1/(i + 1),func)
+                rx, ry, rz = make_square(sec[0], sec[1], 1 / (i + 1), func)
                 ax.plot(rx, ry, rz, label='parametric curve')
             canvas.draw()
             window.update()
@@ -592,10 +590,10 @@ def main():
         window.update()
 
         messagebox.showinfo('Уведомление', 'Готово')
-    
-    def make_square(x,y,rad, func):
-        r_1 = [x-rad, x-rad, x+rad, x+rad]  # x
-        r_2 = [y-rad, y+rad, y+rad, y-rad]  # y
+
+    def make_square(x, y, rad, func):
+        r_1 = [x - rad, x - rad, x + rad, x + rad]  # x
+        r_2 = [y - rad, y + rad, y + rad, y - rad]  # y
         r_3 = [func(r_1[0], r_2[0]), func(r_1[1], r_2[1]), func(r_1[2], r_2[2]), func(r_1[3], r_2[3])]  # z
 
         r_1.append(r_1[0])
@@ -638,10 +636,9 @@ def main():
 
     txt_8_tab_5 = Entry(right_f_tab_5)
     txt_9_tab_5 = Entry(right_f_tab_5)
-    txt_10_tab_5 = Entry(right_f_tab_5)
-    
-    combo_5 = Combobox(right_f_tab_5)
-    combo_5['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
+
+    combo_tab_5 = Combobox(right_f_tab_5)
+    combo_tab_5['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
 
     txt_tab_5 = scrolledtext.ScrolledText(txt_f_tab_5)
     btn_del_tab_5 = Button(tab_5, text="Очистить лог", command=delete_lab_5)
@@ -676,7 +673,7 @@ def main():
     txt_8_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_9_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
-    combo_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    combo_tab_5.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_tab_5.pack(padx=5, pady=5, fill=BOTH, expand=True)
 
@@ -697,7 +694,7 @@ def main():
         mutation = float(txt_4_tab_3.get())
         delay = txt_5_tab_3.get()
 
-        if combo.get() == "Min":
+        if combo_tab_6.get() == "Min":
             min_max = True
         else:
             min_max = False
@@ -784,22 +781,28 @@ def main():
     right_f_tab_6 = Frame(main_f_tab_6)
     txt_f_tab_6 = LabelFrame(tab_6, text="Консоль лог")
 
-    lbl_1_tab_6 = Label(left_f_tab_6, text="Что-то 1")
-    lbl_2_tab_6 = Label(left_f_tab_6, text="Что-то 2")
-    lbl_3_tab_6 = Label(left_f_tab_6, text="Что-то 3")
-    lbl_7_tab_6 = Label(left_f_tab_6, text="Что-то 4")
-    lbl_4_tab_6 = Label(left_f_tab_6, text="Выбор")
+    lbl_1_tab_6 = Label(left_f_tab_6, text="Кол-во итераций")
+    lbl_2_tab_6 = Label(left_f_tab_6, text="Размер популяции")
+    lbl_3_tab_6 = Label(left_f_tab_6, text="Кол-во клонов")
+    lbl_4_tab_6 = Label(left_f_tab_6, text="Кол-во лучших решений из клонов")
     lbl_5_tab_6 = Label(left_f_tab_6, text="Задержка в секундах")
-    lbl_6_tab_6 = Label(tab_6, text="ХЗ")
+    lbl_6_tab_6 = Label(tab_6, text="Иммунная сеть")
+    lbl_7_tab_6 = Label(left_f_tab_6, text="Кол-во лучших решений из популяции")
+    lbl_8_tab_6 = Label(left_f_tab_6, text="X")
+    lbl_9_tab_6 = Label(left_f_tab_6, text="Y")
+    lbl_10_tab_6 = Label(left_f_tab_6, text="Выбор")
 
     txt_1_tab_6 = Entry(right_f_tab_6)
     txt_2_tab_6 = Entry(right_f_tab_6)
     txt_3_tab_6 = Entry(right_f_tab_6)
     txt_4_tab_6 = Entry(right_f_tab_6)
     txt_5_tab_6 = Entry(right_f_tab_6)
+    txt_6_tab_6 = Entry(right_f_tab_6)
+    txt_7_tab_6 = Entry(right_f_tab_6)
+    txt_8_tab_6 = Entry(right_f_tab_6)
 
-    combo = Combobox(right_f_tab_6)
-    combo['values'] = ("1", "2", "3")
+    combo_tab_6 = Combobox(right_f_tab_6)
+    combo_tab_6['values'] = ("1", "2", "3")
 
     txt_tab_6 = scrolledtext.ScrolledText(txt_f_tab_6)
     btn_del_tab_6 = Button(tab_6, text="Очистить лог", command=delete_lab_6)
@@ -814,15 +817,21 @@ def main():
     lbl_2_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_3_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_7_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    lbl_5_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_4_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_8_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_9_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_5_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_10_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_1_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_2_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_3_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_4_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_5_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    combo.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_6_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_7_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_8_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    combo_tab_6.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_tab_6.pack(padx=5, pady=5, fill=BOTH, expand=True)
 
@@ -831,8 +840,159 @@ def main():
     btn_del_tab_6.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
 
     # Лаба 7
+
+    def draw_lab_7():
+        fig.clf()
+
+        x, y, z = make_data_lab_3()
+
+        pop_number = int(txt_1_tab_3.get())
+        iter_number = int(txt_2_tab_3.get())
+        survive = float(txt_3_tab_3.get())
+        mutation = float(txt_4_tab_3.get())
+        delay = txt_5_tab_3.get()
+
+        if combo_tab_6.get() == "Min":
+            min_max = True
+        else:
+            min_max = False
+
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        genetic = GeneticAlgorithmL3(rosenbrock_2, iter_number, min_max, mutation, survive, pop_number)
+        genetic.generate_start_population(5, 5)
+
+        for j in range(pop_number):
+            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                       marker="s")
+        if min_max:
+            gen_stat = list(genetic.statistic()[1])
+        else:
+            gen_stat = list(genetic.statistic()[0])
+
+        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        canvas.draw()
+        window.update()
+
+        # Эти 4 строки ниже это считай удалить точку/точки
+        fig.clf()
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        for i in range(50):
+            for j in range(pop_number):  # Последовательность циклов и объекта genetic советую не менять
+                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                           marker="s")
+
+            genetic.select()
+            genetic.mutation(i)
+
+            if min_max:
+                gen_stat = list(genetic.statistic()[1])
+            else:
+                gen_stat = list(genetic.statistic()[0])
+
+            ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+
+            txt_tab_3.insert(INSERT,
+                             f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
+                             f" ({round(gen_stat[1][2], 4)})\n")
+
+            canvas.draw()
+            window.update()
+            time.sleep(float(delay))
+
+            fig.clf()
+            ax = fig.add_subplot(projection='3d')
+            ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+            canvas.draw()
+
+        for j in range(pop_number):
+            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                       marker="s")
+        if min_max:
+            gen_stat = list(genetic.statistic()[1])
+        else:
+            gen_stat = list(genetic.statistic()[0])
+
+        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+
+        canvas.draw()
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        window.update()
+
+        messagebox.showinfo('Уведомление', 'Готово')
+
+    def delete_lab_7():
+        txt_tab_3.delete(1.0, END)
+
     tab_7 = Frame(tab_control)
     tab_control.add(tab_7, text="Lab_7")
+
+    main_f_tab_7 = LabelFrame(tab_7, text="Параметры")
+    left_f_tab_7 = Frame(main_f_tab_7)
+    right_f_tab_7 = Frame(main_f_tab_7)
+    txt_f_tab_7 = LabelFrame(tab_7, text="Консоль лог")
+
+    lbl_1_tab_7 = Label(left_f_tab_7, text="Кол-во итераций")
+    lbl_2_tab_7 = Label(left_f_tab_7, text="Размер популяции")
+    lbl_3_tab_7 = Label(left_f_tab_7, text="Шаги хемотаксиса")
+    lbl_4_tab_7 = Label(left_f_tab_7, text=" Вероятность ликвидации")
+    lbl_5_tab_7 = Label(left_f_tab_7, text="Задержка в секундах")
+    lbl_6_tab_7 = Label(tab_7, text="Бактериальная оптимизация")
+    lbl_7_tab_7 = Label(left_f_tab_7, text="X")
+    lbl_8_tab_7 = Label(left_f_tab_7, text="Y")
+    lbl_9_tab_7 = Label(left_f_tab_7, text="Выбор")
+
+    txt_1_tab_7 = Entry(right_f_tab_7)
+    txt_2_tab_7 = Entry(right_f_tab_7)
+    txt_3_tab_7 = Entry(right_f_tab_7)
+    txt_4_tab_7 = Entry(right_f_tab_7)
+    txt_5_tab_7 = Entry(right_f_tab_7)
+    txt_6_tab_7 = Entry(right_f_tab_7)
+    txt_7_tab_7 = Entry(right_f_tab_7)
+
+    combo_tab_7 = Combobox(right_f_tab_7)
+    combo_tab_7['values'] = ("1", "2", "3")
+
+    txt_tab_7 = scrolledtext.ScrolledText(txt_f_tab_7)
+    btn_del_tab_7 = Button(tab_7, text="Очистить лог", command=delete_lab_7)
+    btn_tab_7 = Button(tab_6, text="Выполнить", foreground="black", background="#00FFFF", command=draw_lab_7)
+
+    lbl_6_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    main_f_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
+    left_f_tab_7.pack(side=LEFT, fill=BOTH, expand=True)
+    right_f_tab_7.pack(side=RIGHT, fill=BOTH, expand=True)
+
+    lbl_1_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_2_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_3_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_4_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_7_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_8_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_5_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_9_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_1_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_2_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_3_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_4_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_5_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_6_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_7_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    combo_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_tab_7.pack(padx=5, pady=5, fill=BOTH, expand=True)
+
+    btn_tab_7.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    txt_f_tab_7.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    btn_del_tab_7.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
 
     # Лаба 8
     tab_8 = Frame(tab_control)
