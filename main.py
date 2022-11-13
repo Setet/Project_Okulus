@@ -619,7 +619,7 @@ def main():
     lbl_3_tab_5 = Label(left_f_tab_5, text="Элитных участков")
     lbl_4_tab_5 = Label(left_f_tab_5, text="Задержка в секундах")
     lbl_6_tab_5 = Label(left_f_tab_5, text="Перспективных участков")
-    lbl_7_tab_5 = Label(left_f_tab_5, text="Выборы 2022")
+    lbl_7_tab_5 = Label(left_f_tab_5, text="Выбор")
     lbl_8_tab_5 = Label(left_f_tab_5, text="Рабочих на элитных участках")
     lbl_9_tab_5 = Label(left_f_tab_5, text="Рабочих на перспективных участках")
 
@@ -995,8 +995,184 @@ def main():
     btn_del_tab_7.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
 
     # Лаба 8
+
+    def draw_lab_8():
+        fig.clf()
+
+        x, y, z = make_data_lab_3()
+
+        pop_number = int(txt_1_tab_3.get())
+        iter_number = int(txt_2_tab_3.get())
+        survive = float(txt_3_tab_3.get())
+        mutation = float(txt_4_tab_3.get())
+        delay = txt_5_tab_3.get()
+
+        if combo_tab_6.get() == "Min":
+            min_max = True
+        else:
+            min_max = False
+
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        genetic = GeneticAlgorithmL3(rosenbrock_2, iter_number, min_max, mutation, survive, pop_number)
+        genetic.generate_start_population(5, 5)
+
+        for j in range(pop_number):
+            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                       marker="s")
+        if min_max:
+            gen_stat = list(genetic.statistic()[1])
+        else:
+            gen_stat = list(genetic.statistic()[0])
+
+        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        canvas.draw()
+        window.update()
+
+        # Эти 4 строки ниже это считай удалить точку/точки
+        fig.clf()
+        ax = fig.add_subplot(projection='3d')
+        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+        canvas.draw()
+
+        for i in range(50):
+            for j in range(pop_number):  # Последовательность циклов и объекта genetic советую не менять
+                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                           marker="s")
+
+            genetic.select()
+            genetic.mutation(i)
+
+            if min_max:
+                gen_stat = list(genetic.statistic()[1])
+            else:
+                gen_stat = list(genetic.statistic()[0])
+
+            ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+
+            txt_tab_3.insert(INSERT,
+                             f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
+                             f" ({round(gen_stat[1][2], 4)})\n")
+
+            canvas.draw()
+            window.update()
+            time.sleep(float(delay))
+
+            fig.clf()
+            ax = fig.add_subplot(projection='3d')
+            ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
+            canvas.draw()
+
+        for j in range(pop_number):
+            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
+                       marker="s")
+        if min_max:
+            gen_stat = list(genetic.statistic()[1])
+        else:
+            gen_stat = list(genetic.statistic()[0])
+
+        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+
+        canvas.draw()
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        window.update()
+
+        messagebox.showinfo('Уведомление', 'Готово')
+
+    def delete_lab_8():
+        txt_tab_3.delete(1.0, END)
+
     tab_8 = Frame(tab_control)
     tab_control.add(tab_8, text="Lab_8")
+
+    main_f_tab_8 = LabelFrame(tab_8, text="Параметры")
+    left_f_tab_8 = Frame(main_f_tab_8)
+    right_f_tab_8 = Frame(main_f_tab_8)
+    txt_f_tab_8 = LabelFrame(tab_8, text="Консоль лог")
+
+    lbl_5_tab_8 = Label(tab_8, text="Пчелиный алгоритм")
+    lbl_1_tab_8 = Label(left_f_tab_8, text="Количество итераций")
+    lbl_2_tab_8 = Label(left_f_tab_8, text="Количество разведчиков")
+    lbl_3_tab_8 = Label(left_f_tab_8, text="Элитных участков")
+    lbl_4_tab_8 = Label(left_f_tab_8, text="Задержка в секундах")
+    lbl_6_tab_8 = Label(left_f_tab_8, text="Перспективных участков")
+    lbl_7_tab_8 = Label(left_f_tab_8, text="Выбор")
+    lbl_8_tab_8 = Label(left_f_tab_8, text="Рабочих на элитных участках")
+    lbl_9_tab_8 = Label(left_f_tab_8, text="Рабочих на перспективных участках")
+
+    lbl_10_tab_8 = Label(left_f_tab_8, text="X")
+    lbl_11_tab_8 = Label(left_f_tab_8, text="Y")
+
+    lbl_12_tab_8 = Label(left_f_tab_8, text="Личный коэффициент")
+    lbl_13_tab_8 = Label(left_f_tab_8, text="Рабочий коэффициент")
+
+    txt_1_tab_8 = Entry(right_f_tab_8)
+    txt_2_tab_8 = Entry(right_f_tab_8)
+    txt_3_tab_8 = Entry(right_f_tab_8)
+    txt_4_tab_8 = Entry(right_f_tab_8)
+    txt_5_tab_8 = Entry(right_f_tab_8)
+    txt_6_tab_8 = Entry(right_f_tab_8)
+    txt_7_tab_8 = Entry(right_f_tab_8)
+
+    txt_8_tab_8 = Entry(right_f_tab_8)
+    txt_9_tab_8 = Entry(right_f_tab_8)
+
+    txt_10_tab_8 = Entry(right_f_tab_8)
+    txt_11_tab_8 = Entry(right_f_tab_8)
+
+    combo_tab_8 = Combobox(right_f_tab_8)
+    combo_tab_8['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
+
+    txt_tab_8 = scrolledtext.ScrolledText(txt_f_tab_8)
+    btn_del_tab_8 = Button(tab_8, text="Очистить лог", command=delete_lab_8)
+    btn_tab_8 = Button(tab_8, text="Выполнить", foreground="black", background="#00FFFF", command=draw_lab_8)
+
+    lbl_5_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    main_f_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
+    left_f_tab_8.pack(side=LEFT, fill=BOTH, expand=True)
+    right_f_tab_8.pack(side=RIGHT, fill=BOTH, expand=True)
+
+    lbl_1_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_2_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_3_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_6_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_8_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_9_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_4_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    lbl_12_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_13_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    lbl_10_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    lbl_11_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    lbl_7_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_1_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_2_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_3_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_4_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_5_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_6_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_7_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_10_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_11_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_8_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    txt_9_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    combo_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+
+    txt_tab_8.pack(padx=5, pady=5, fill=BOTH, expand=True)
+
+    btn_tab_8.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    txt_f_tab_8.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
+    btn_del_tab_8.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
 
     tab_control.pack(side=RIGHT, fill=BOTH, expand=True)
     window.mainloop()
