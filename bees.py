@@ -21,8 +21,8 @@ class Bees:
         self.b_leet = bees_to_leet
         self.b_persp = bees_to_persp
 
-        maxb = max(self.scouts, key=itemgetter(2))
-        self.workers = [[self.pos_x, self.pos_y, maxb[2]] for _ in range(self.n_workers)]
+        max_b = max(self.scouts, key=itemgetter(2))
+        self.workers = [[self.pos_x, self.pos_y, max_b[2]] for _ in range(self.n_workers)]
 
         self.bees = list()
 
@@ -45,11 +45,11 @@ class Bees:
     def get_best(self):
         return self.bees[0]
 
-    def send_workers(func, bee_part, sector, radius):
+    def send_workers(self, bee_part, sector, radius):
         for bee in bee_part:
             bee[0] = random.uniform(sector[0] - radius, sector[0] + radius)
             bee[1] = random.uniform(sector[1] - radius, sector[1] + radius)
-            bee[2] = func(bee[0], bee[1])
+            bee[2] = self
 
     def selected_search(self, param):
         for i in range(self.e):
@@ -58,8 +58,5 @@ class Bees:
 
         for i in range(self.p):
             Bees.send_workers(self.func, self.workers[
-                                         self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
-                              self.selected[self.e + i], self.rad * param)
-
-# 1) init -> research_reports -> selected_search -> get_best -> 
-# 2 - ...) send_scouts -> research_reports -> selected_search -> get_best -> ...
+                                         self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet +
+                                         i * self.b_persp + self.b_persp],self.selected[self.e + i], self.rad * param)
