@@ -17,6 +17,7 @@ from pso import PSO
 from bees import Bees
 from immune import Immunity
 from bacterias import Bacteria
+from immune_bacteria_hybrid import ImmuBac
 from functions import *
 
 
@@ -683,18 +684,6 @@ def main():
     txt_f_tab_5.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
     btn_del_tab_5.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
 
-    # Лаба 6
-
-     #lbl_1_tab_6 = Label(left_f_tab_6, text="Кол-во итераций")
-    #lbl_2_tab_6 = Label(left_f_tab_6, text="Размер популяции")
-    #lbl_3_tab_6 = Label(left_f_tab_6, text="Кол-во клонов")
-    #lbl_4_tab_6 = Label(left_f_tab_6, text="Кол-во лучших решений из клонов")
-    #lbl_5_tab_6 = Label(left_f_tab_6, text="Задержка в секундах")
-    #lbl_6_tab_6 = Label(tab_6, text="Иммунная сеть")
-    #lbl_7_tab_6 = Label(left_f_tab_6, text="Кол-во лучших решений из популяции")
-    #lbl_8_tab_6 = Label(left_f_tab_6, text="X")
-    #lbl_9_tab_6 = Label(left_f_tab_6, text="Y")
-    #lbl_10_tab_6 = Label(left_f_tab_6, text="Выбор")
 
     def draw_lab_6():
         fig.clf()
@@ -994,62 +983,61 @@ def main():
     def draw_lab_8():
         fig.clf()
 
-        x, y, z = make_data_lab_3()
+        pop_number = int(txt_2_tab_8.get())
+        iter_number = int(txt_1_tab_8.get())
+        clon = int(txt_3_tab_8.get())
+        best_clon = int(txt_5_tab_8.get())
+        best_pop = int(txt_4_tab_8.get())
+        chemo = int(txt_9_tab_8.get())
+        licvid = int(txt_10_tab_8.get())
+        pos_x = int(txt_6_tab_8.get())
+        pos_y = int(txt_7_tab_8.get())
+        delay = txt_8_tab_8.get()
 
-        pop_number = int(txt_1_tab_3.get())
-        iter_number = int(txt_2_tab_3.get())
-        survive = float(txt_3_tab_3.get())
-        mutation = float(txt_4_tab_3.get())
-        delay = txt_5_tab_3.get()
-
-        if combo_tab_6.get() == "Min":
-            min_max = True
+        if combo_tab_6.get() == "Химмельблау":
+            func = himmelblau_2
+            x, y, z = make_data_himmelblau(pos_x, pos_y)
+        elif combo_tab_6.get() == "Розенброка":
+            func = rosenbrock_2
+            x, y, z = make_data_rosenbrock(pos_x, pos_y)
         else:
-            min_max = False
+            func = rastrigin_2
+            x, y, z = make_data_rastrigin(pos_x, pos_y)
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        genetic = GeneticAlgorithmL3(rosenbrock_2, iter_number, min_max, mutation, survive, pop_number)
-        genetic.generate_start_population(5, 5)
+        immu_ba = ImmuBac(func,pop_number,clon,best_pop,best_clon,chemo,licvid,pos_x,pos_y)
+        
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
+        for ag in ImmuBac.agents:
+            ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        b = ImmuBac.get_best()
+        ax.scatter(b[0], b[1], b[2], c="red")
+
         canvas.draw()
         window.update()
 
-        # Эти 4 строки ниже это считай удалить точку/точки
         fig.clf()
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        for i in range(50):
-            for j in range(pop_number):  # Последовательность циклов и объекта genetic советую не менять
-                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                           marker="s")
+        for i in range(iter_number):
+            ImmuBac.immune_step(1/(i+1))
 
-            genetic.select()
-            genetic.mutation(i)
+            for ag in ImmuBac.agents:
+                ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-            if min_max:
-                gen_stat = list(genetic.statistic()[1])
-            else:
-                gen_stat = list(genetic.statistic()[0])
+            b = ImmuBac.get_best()
+            ax.scatter(b[0], b[1], b[2], c="red")
 
-            ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
-
-            txt_tab_3.insert(INSERT,
-                             f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
-                             f" ({round(gen_stat[1][2], 4)})\n")
+            txt_tab_6.insert(INSERT,
+                             f"{i + 1}) ({round(b[0], 8)})"
+                             f" ({round(b[1], 8)}) = "
+                             f" ({round(b[2], 8)})\n")
 
             canvas.draw()
             window.update()
@@ -1060,20 +1048,18 @@ def main():
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
+        for ag in ImmuBac.agents:
+            ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        b = ImmuBac.get_best()
+        ax.scatter(b[0], b[1], b[2], c="red")
+
+        txt_tab_6.insert(INSERT,
+                        f"{i + 1}) ({round(b[0], 8)})"
+                        f" ({round(b[1], 8)}) = "
+                        f" ({round(b[2], 8)})\n")
 
         canvas.draw()
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
         window.update()
 
         messagebox.showinfo('Уведомление', 'Готово')
@@ -1089,21 +1075,20 @@ def main():
     right_f_tab_8 = Frame(main_f_tab_8)
     txt_f_tab_8 = LabelFrame(tab_8, text="Консоль лог")
 
-    lbl_5_tab_8 = Label(tab_8, text="Пчелиный алгоритм")
+    lbl_5_tab_8 = Label(tab_8, text="Иммунно-бактериальный гибрид")
     lbl_1_tab_8 = Label(left_f_tab_8, text="Количество итераций")
-    lbl_2_tab_8 = Label(left_f_tab_8, text="Количество разведчиков")
-    lbl_3_tab_8 = Label(left_f_tab_8, text="Элитных участков")
-    lbl_4_tab_8 = Label(left_f_tab_8, text="Задержка в секундах")
-    lbl_6_tab_8 = Label(left_f_tab_8, text="Перспективных участков")
+    lbl_2_tab_8 = Label(left_f_tab_8, text="Размер популяции")
+    lbl_3_tab_8 = Label(left_f_tab_8, text="Кол-во клонов")
+    lbl_4_tab_8 = Label(left_f_tab_8, text="Кол-во лучших решений из клонов")
+    lbl_6_tab_8 = Label(left_f_tab_8, text="Кол-во лучших решений из популяции")
     lbl_7_tab_8 = Label(left_f_tab_8, text="Выбор")
-    lbl_8_tab_8 = Label(left_f_tab_8, text="Рабочих на элитных участках")
-    lbl_9_tab_8 = Label(left_f_tab_8, text="Рабочих на перспективных участках")
+    lbl_8_tab_8 = Label(left_f_tab_8, text="Шагов хемотаксиса")
+    lbl_9_tab_8 = Label(left_f_tab_8, text="Шанс ликвидации")
 
     lbl_10_tab_8 = Label(left_f_tab_8, text="X")
     lbl_11_tab_8 = Label(left_f_tab_8, text="Y")
 
-    lbl_12_tab_8 = Label(left_f_tab_8, text="Личный коэффициент")
-    lbl_13_tab_8 = Label(left_f_tab_8, text="Рабочий коэффициент")
+    lbl_12_tab_8 = Label(left_f_tab_8, text="Задержка")
 
     txt_1_tab_8 = Entry(right_f_tab_8)
     txt_2_tab_8 = Entry(right_f_tab_8)
@@ -1140,7 +1125,6 @@ def main():
     lbl_4_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     lbl_12_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    lbl_13_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     lbl_10_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     lbl_11_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
