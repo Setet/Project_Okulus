@@ -46,4 +46,8 @@ def rastrigin(x):
     return np.sum(x[1:]**2 - 10*np.cos(2*np.pi*x[1:]) + x[:-1]**2 - 10*np.cos(2*np.pi*x[:-1]), axis=0)
 
 def rastrigin_2(x, y):
-    return np.sum(x**2 - 10*np.cos(2*np.pi*x) + y**2 - 10*np.cos(2*np.pi*y))
+    return x**2 - 10*np.cos(2*np.pi*x) + y**2 - 10*np.cos(2*np.pi*y)
+
+
+def hypersphere_2(x,y):
+    return x**2 + y**2
