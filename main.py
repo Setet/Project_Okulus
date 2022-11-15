@@ -986,11 +986,11 @@ def main():
         clon = int(txt_3_tab_8.get())
         best_pop = int(txt_4_tab_8.get())
         chemo = int(txt_5_tab_8.get())
-        licvid = int(txt_6_tab_8.get())
+        licvid = float(txt_6_tab_8.get())
         best_clon = int(txt_7_tab_8.get())
-        delay = txt_8_tab_8.get()
-        pos_x = int(txt_9_tab_8.get())
-        pos_y = int(txt_10_tab_8.get())
+        delay = txt_10_tab_8.get()
+        pos_x = int(txt_8_tab_8.get())
+        pos_y = int(txt_9_tab_8.get())
 
         if combo_tab_8.get() == "Химмельблау":
             func = himmelblau_2
@@ -1008,10 +1008,10 @@ def main():
 
         immu_ba = ImmuBac(func, pop_number, clon, best_pop, best_clon, chemo, licvid, pos_x, pos_y)
 
-        for ag in ImmuBac.agents:
+        for ag in immu_ba.agents:
             ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-        b = ImmuBac.get_best()
+        b = immu_ba.get_best()
         ax.scatter(b[0], b[1], b[2], c="red")
 
         canvas.draw()
@@ -1023,15 +1023,15 @@ def main():
         canvas.draw()
 
         for i in range(iter_number):
-            ImmuBac.immune_step(1 / (i + 1))
+            immu_ba.immune_bact_step(1 / (i + 1))
 
-            for ag in ImmuBac.agents:
+            for ag in immu_ba.agents:
                 ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-            b = ImmuBac.get_best()
+            b = immu_ba.get_best()
             ax.scatter(b[0], b[1], b[2], c="red")
 
-            txt_tab_6.insert(INSERT,
+            txt_tab_8.insert(INSERT,
                              f"{i + 1}) ({round(b[0], 8)})"
                              f" ({round(b[1], 8)}) = "
                              f" ({round(b[2], 8)})\n")
@@ -1045,13 +1045,13 @@ def main():
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for ag in ImmuBac.agents:
+        for ag in immu_ba.agents:
             ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-        b = ImmuBac.get_best()
+        b = immu_ba.get_best()
         ax.scatter(b[0], b[1], b[2], c="red")
 
-        txt_tab_6.insert(INSERT,
+        txt_tab_8.insert(INSERT,
                          f"{i + 1}) ({round(b[0], 8)})"
                          f" ({round(b[1], 8)}) = "
                          f" ({round(b[2], 8)})\n")
