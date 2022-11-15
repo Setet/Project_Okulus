@@ -3,9 +3,10 @@ import numpy as np
 from operator import itemgetter
 
 
-#Bee and Particle swarm Hybrid 
+# Bee and Particle swarm Hybrid
 class BPH:
-    def __init__(self, func, scouts, elite, perspect, bees_to_leet, bees_to_persp, fi_p, fi_g, radius, position_x, position_y):
+    def __init__(self, func, scouts, elite, perspect, bees_to_leet, bees_to_persp, fi_p, fi_g, radius, position_x,
+                 position_y):
         self.func = func
 
         self.pos_x = float(position_x)
@@ -37,7 +38,6 @@ class BPH:
         self.selected_nostalgia = list()
         self.velocity = [[0.0 for _ in range(2)] for _ in range(self.n_workers)]
 
-
     def send_scouts(self):
         for unit in self.scouts:
             unit[0] = random.uniform(-self.pos_x, self.pos_x)
@@ -50,12 +50,12 @@ class BPH:
 
         for i in range(self.e):
             BPH.send_workers(self.func, self.workers[i * self.b_leet:i * self.b_leet + self.b_leet], self.selected[i],
-                              i, self.rad)
+                             i, self.rad)
 
         for i in range(self.p):
             BPH.send_workers(self.func, self.workers[
-                                         self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
-                              self.selected[self.e + i], self.e+i, self.rad)
+                                        self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
+                             self.selected[self.e + i], self.e + i, self.rad)
         self.nostalgia = self.workers.copy()
 
     def iteration(self):
@@ -63,29 +63,28 @@ class BPH:
         BPH.research_reports()
 
         for i in range(self.e):
-            BPH.move_worker_swarm(self, 
-            self.workers[i * self.b_leet:i * self.b_leet + self.b_leet],
-            self.velocity[i * self.b_leet:i * self.b_leet + self.b_leet],
-            self.nostalgia[i * self.b_leet:i * self.b_leet + self.b_leet],
-            self.selected_nostalgia[i]
-            )
+            BPH.move_worker_swarm(self,
+                                  self.workers[i * self.b_leet:i * self.b_leet + self.b_leet],
+                                  self.velocity[i * self.b_leet:i * self.b_leet + self.b_leet],
+                                  self.nostalgia[i * self.b_leet:i * self.b_leet + self.b_leet],
+                                  self.selected_nostalgia[i]
+                                  )
 
         for i in range(self.p):
-            BPH.move_worker_swarm(self, 
-            self.workers[self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
-            self.velocity[self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
-            self.nostalgia[i * self.b_leet:i * self.b_leet + self.b_leet],
-            self.selected_nostalgia[self.e + i]
-            )
-
-
+            BPH.move_worker_swarm(self,
+                                  self.workers[
+                                  self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
+                                  self.velocity[
+                                  self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
+                                  self.nostalgia[i * self.b_leet:i * self.b_leet + self.b_leet],
+                                  self.selected_nostalgia[self.e + i]
+                                  )
 
     def research_reports(self):
         self.bees = self.scouts + self.workers + self.selected_nostalgia
         self.bees = sorted(self.bees, key=itemgetter(2), reverse=False)
 
         self.selected = self.bees[:self.e + self.p]
-
 
     def send_workers(self, bee_part, sector, sector_numb, radius):
         for bee in bee_part:
@@ -94,7 +93,6 @@ class BPH:
             bee[2] = self.func(bee[0], bee[1])
             if bee[2] < sector[2]:
                 self.selected_nostalgia[sector_numb] = bee.copy()
-
 
     def update_velocity(self, velocity, particle, nostalgia, point_best) -> list:
         new_vel = list()
@@ -106,13 +104,11 @@ class BPH:
                     point_best[i] - particle[i])))
         return new_vel
 
-
     def update_position(self, velocity, particle):
         x = particle[0] + velocity[0]
         y = particle[1] + velocity[1]
 
         return [x, y, self.func(x, y)]
-
 
     def move_worker_swarm(self, worker_part, velocity_part, nostalgia_part, best_point):
         for i in range(worker_part):
@@ -123,20 +119,19 @@ class BPH:
                 nostalgia_part[i] = worker_part[i]
                 best_point = worker_part[i]
 
-            velocity_part[i] = BPH.update_velocity(self, velocity_part[i], worker_part[i], nostalgia_part[i], best_point)
+            velocity_part[i] = BPH.update_velocity(self, velocity_part[i], worker_part[i], nostalgia_part[i],
+                                                   best_point)
             worker_part[i] = BPH.update_position(self, velocity_part[i], worker_part[i])
-
 
     def selected_search(self, param):
         for i in range(self.e):
             BPH.send_workers(self.func, self.workers[i * self.b_leet:i * self.b_leet + self.b_leet], self.selected[i],
-                              self.rad * param)
+                             self.rad * param)
 
         for i in range(self.p):
             BPH.send_workers(self.func, self.workers[
-                                         self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
-                              self.selected[self.e + i], self.rad * param)
-
+                                        self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet + i * self.b_persp + self.b_persp],
+                             self.selected[self.e + i], self.rad * param)
 
     def get_best(self):
         return self.bees[0]
