@@ -59,4 +59,5 @@ class Bees:
         for i in range(self.p):
             Bees.send_workers(self.func, self.workers[
                                          self.e * self.b_leet + i * self.b_persp:self.e * self.b_leet +
-                                         i * self.b_persp + self.b_persp],self.selected[self.e + i], self.rad * param)
+                                                                                 i * self.b_persp + self.b_persp],
+                              self.selected[self.e + i], self.rad * param)
