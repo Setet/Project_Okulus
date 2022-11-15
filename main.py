@@ -15,6 +15,8 @@ from Rosenbrock_function import make_data_lab_3, rosenbrock_2
 from genetic_algorithm_l3 import GeneticAlgorithmL3
 from pso import PSO
 from bees import Bees
+from immune import Immunity
+from bacterias import Bacteria
 from functions import *
 
 
@@ -683,65 +685,73 @@ def main():
 
     # Лаба 6
 
+     #lbl_1_tab_6 = Label(left_f_tab_6, text="Кол-во итераций")
+    #lbl_2_tab_6 = Label(left_f_tab_6, text="Размер популяции")
+    #lbl_3_tab_6 = Label(left_f_tab_6, text="Кол-во клонов")
+    #lbl_4_tab_6 = Label(left_f_tab_6, text="Кол-во лучших решений из клонов")
+    #lbl_5_tab_6 = Label(left_f_tab_6, text="Задержка в секундах")
+    #lbl_6_tab_6 = Label(tab_6, text="Иммунная сеть")
+    #lbl_7_tab_6 = Label(left_f_tab_6, text="Кол-во лучших решений из популяции")
+    #lbl_8_tab_6 = Label(left_f_tab_6, text="X")
+    #lbl_9_tab_6 = Label(left_f_tab_6, text="Y")
+    #lbl_10_tab_6 = Label(left_f_tab_6, text="Выбор")
+
     def draw_lab_6():
         fig.clf()
 
-        x, y, z = make_data_lab_3()
+        pop_number = int(txt_2_tab_6.get())
+        iter_number = int(txt_1_tab_6.get())
+        clon = int(txt_3_tab_6.get())
+        best_clon = int(txt_5_tab_6.get())
+        best_pop = int(txt_4_tab_6.get())
+        pos_x = int(txt_6_tab_6.get())
+        pos_y = int(txt_7_tab_6.get())
+        delay = txt_8_tab_6.get()
 
-        pop_number = int(txt_1_tab_3.get())
-        iter_number = int(txt_2_tab_3.get())
-        survive = float(txt_3_tab_3.get())
-        mutation = float(txt_4_tab_3.get())
-        delay = txt_5_tab_3.get()
-
-        if combo_tab_6.get() == "Min":
-            min_max = True
+        if combo_tab_6.get() == "Химмельблау":
+            func = himmelblau_2
+            x, y, z = make_data_himmelblau(pos_x, pos_y)
+        elif combo_tab_6.get() == "Розенброка":
+            func = rosenbrock_2
+            x, y, z = make_data_rosenbrock(pos_x, pos_y)
         else:
-            min_max = False
+            func = rastrigin_2
+            x, y, z = make_data_rastrigin(pos_x, pos_y)
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        genetic = GeneticAlgorithmL3(rosenbrock_2, iter_number, min_max, mutation, survive, pop_number)
-        genetic.generate_start_population(5, 5)
+        immunity = Immunity(func,pop_number,clon,best_pop,best_clon,pos_x,pos_y)
+        
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
+        for ag in immunity.agents:
+            ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        b = immunity.get_best()
+        ax.scatter(b[0], b[1], b[2], c="red")
+
         canvas.draw()
         window.update()
 
-        # Эти 4 строки ниже это считай удалить точку/точки
         fig.clf()
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        for i in range(50):
-            for j in range(pop_number):  # Последовательность циклов и объекта genetic советую не менять
-                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                           marker="s")
+        for i in range(iter_number):
+            immunity.immune_step(1/(i+1))
 
-            genetic.select()
-            genetic.mutation(i)
+            for ag in immunity.agents:
+                ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-            if min_max:
-                gen_stat = list(genetic.statistic()[1])
-            else:
-                gen_stat = list(genetic.statistic()[0])
+            b = immunity.get_best()
+            ax.scatter(b[0], b[1], b[2], c="red")
 
-            ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
-
-            txt_tab_3.insert(INSERT,
-                             f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
-                             f" ({round(gen_stat[1][2], 4)})\n")
+            txt_tab_6.insert(INSERT,
+                             f"{i + 1}) ({round(b[0], 8)})"
+                             f" ({round(b[1], 8)}) = "
+                             f" ({round(b[2], 8)})\n")
 
             canvas.draw()
             window.update()
@@ -752,26 +762,24 @@ def main():
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
+        for ag in immunity.agents:
+            ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
 
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        b = immunity.get_best()
+        ax.scatter(b[0], b[1], b[2], c="red")
+
+        txt_tab_6.insert(INSERT,
+                        f"{i + 1}) ({round(b[0], 8)})"
+                        f" ({round(b[1], 8)}) = "
+                        f" ({round(b[2], 8)})\n")
 
         canvas.draw()
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
         window.update()
 
         messagebox.showinfo('Уведомление', 'Готово')
 
     def delete_lab_6():
-        txt_tab_3.delete(1.0, END)
+        txt_tab_6.delete(1.0, END)
 
     tab_6 = Frame(tab_control)
     tab_control.add(tab_6, text="Lab_6")
@@ -802,7 +810,7 @@ def main():
     txt_8_tab_6 = Entry(right_f_tab_6)
 
     combo_tab_6 = Combobox(right_f_tab_6)
-    combo_tab_6['values'] = ("1", "2", "3")
+    combo_tab_6['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
 
     txt_tab_6 = scrolledtext.ScrolledText(txt_f_tab_6)
     btn_del_tab_6 = Button(tab_6, text="Очистить лог", command=delete_lab_6)
@@ -844,62 +852,47 @@ def main():
     def draw_lab_7():
         fig.clf()
 
-        x, y, z = make_data_lab_3()
+        iter_number = int(txt_1_tab_7.get())
+        population = int(txt_2_tab_7.get())
+        xemotaxis = int(txt_3_tab_7.get())
+        licvid = float(txt_4_tab_7.get())
+        pos_x = int(txt_5_tab_7.get())
+        pos_y = int(txt_6_tab_7.get())
+        delay = txt_7_tab_7.get()
 
-        pop_number = int(txt_1_tab_3.get())
-        iter_number = int(txt_2_tab_3.get())
-        survive = float(txt_3_tab_3.get())
-        mutation = float(txt_4_tab_3.get())
-        delay = txt_5_tab_3.get()
-
-        if combo_tab_6.get() == "Min":
-            min_max = True
+        if combo_tab_7.get() == "Химмельблау":
+            func = himmelblau_2
+            x, y, z = make_data_himmelblau(pos_x, pos_y)
+        elif combo_tab_7.get() == "Розенброка":
+            func = rosenbrock_2
+            x, y, z = make_data_rosenbrock(pos_x, pos_y)
         else:
-            min_max = False
+            func = rastrigin_2
+            x, y, z = make_data_rastrigin(pos_x, pos_y)
 
         ax = fig.add_subplot(projection='3d')
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        genetic = GeneticAlgorithmL3(rosenbrock_2, iter_number, min_max, mutation, survive, pop_number)
-        genetic.generate_start_population(5, 5)
+        bacterias = Bacteria(func, population,xemotaxis,licvid,pos_x,pos_y)
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
+        for i in range(iter_number):
 
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
-        canvas.draw()
-        window.update()
+            bacterias.chemotaxis(1/(i+1))
+            bacterias.reproduction()
+            bacterias.elimnination()
 
-        # Эти 4 строки ниже это считай удалить точку/точки
-        fig.clf()
-        ax = fig.add_subplot(projection='3d')
-        ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
-        canvas.draw()
+            for bac in bacterias.agents:
+                ax.scatter(bac[0], bac[1], bac[2], c="black", s=1, marker="s")
 
-        for i in range(50):
-            for j in range(pop_number):  # Последовательность циклов и объекта genetic советую не менять
-                ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                           marker="s")
+            b = bacterias.get_best()
+            ax.scatter(b[0], b[1], b[2], c="red")
 
-            genetic.select()
-            genetic.mutation(i)
-
-            if min_max:
-                gen_stat = list(genetic.statistic()[1])
-            else:
-                gen_stat = list(genetic.statistic()[0])
-
-            ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
-
-            txt_tab_3.insert(INSERT,
-                             f"{i}) ({round(gen_stat[1][0], 4)}) ({round(gen_stat[1][1], 4)}) = "
-                             f" ({round(gen_stat[1][2], 4)})\n")
+            txt_tab_7.insert(INSERT,
+                             f"{i + 1}) ({round(b[0], 6)})"
+                             f" ({round(b[1], 6)}) = "
+                             f" ({round(b[2], 6)})"
+                             f" H=({round(b[3], 2)})\n")
 
             canvas.draw()
             window.update()
@@ -910,26 +903,28 @@ def main():
             ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
             canvas.draw()
 
-        for j in range(pop_number):
-            ax.scatter(genetic.population[j][0], genetic.population[j][1], genetic.population[j][2], c="black", s=1,
-                       marker="s")
-        if min_max:
-            gen_stat = list(genetic.statistic()[1])
-        else:
-            gen_stat = list(genetic.statistic()[0])
+        for bac in bacterias.agents:
+                ax.scatter(bac[0], bac[1], bac[2], c="black", s=1, marker="s")
 
-        ax.scatter(gen_stat[1][0], gen_stat[1][1], gen_stat[1][2], c="red")
+        b = bacterias.get_best()
+        ax.scatter(b[0], b[1], b[2], c="red")
+
+        txt_tab_7.insert(INSERT,
+                        f"{i + 1}) ({round(b[0], 6)})"
+                        f" ({round(b[1], 6)}) = "
+                        f" ({round(b[2], 6)})"
+                        f"H=({round(b[3], 2)})\n")
 
         canvas.draw()
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
+        window.update()
+
+        canvas.draw()
         window.update()
 
         messagebox.showinfo('Уведомление', 'Готово')
 
     def delete_lab_7():
-        txt_tab_3.delete(1.0, END)
+        txt_tab_7.delete(1.0, END)
 
     tab_7 = Frame(tab_control)
     tab_control.add(tab_7, text="Lab_7")
@@ -958,11 +953,11 @@ def main():
     txt_7_tab_7 = Entry(right_f_tab_7)
 
     combo_tab_7 = Combobox(right_f_tab_7)
-    combo_tab_7['values'] = ("1", "2", "3")
+    combo_tab_7['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
 
     txt_tab_7 = scrolledtext.ScrolledText(txt_f_tab_7)
     btn_del_tab_7 = Button(tab_7, text="Очистить лог", command=delete_lab_7)
-    btn_tab_7 = Button(tab_6, text="Выполнить", foreground="black", background="#00FFFF", command=draw_lab_7)
+    btn_tab_7 = Button(tab_7, text="Выполнить", foreground="black", background="#00FFFF", command=draw_lab_7)
 
     lbl_6_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     main_f_tab_7.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)

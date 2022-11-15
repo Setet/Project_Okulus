@@ -56,9 +56,9 @@ class Bacteria:
     def get_best(self):
         return sorted(self.agents, key=itemgetter(2), reverse=False)[0]
     
-my_bactries = Bacteria(rosenbrock_2,100, 5 ,0.2,5,5)
-for i in range(50):
-    my_bactries.chemotaxis(1/(i+1))
-    my_bactries.reproduction()
-    my_bactries.elimnination()
-    print(my_bactries.get_best())
+#my_bactries = Bacteria(rosenbrock_2,100, 5 ,0.2,5,5)
+#for i in range(50):
+#    my_bactries.chemotaxis(1/(i+1))
+#    my_bactries.reproduction()
+#    my_bactries.elimnination()
+#    print(my_bactries.get_best())

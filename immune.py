@@ -45,7 +45,7 @@ class Immunity:
     def get_best(self):
         return self.agents[0]
 
-my_immune = Immunity(rosenbrock_2,50, 5,10,10,5,5)
-for i in range(50):
-    my_immune.immune_step(1/(i+1))
-    print(my_immune.get_best())
+#my_immune = Immunity(rosenbrock_2,50, 5,10,10,5,5)
+#for i in range(50):
+#    my_immune.immune_step(1/(i+1))
+#    print(my_immune.get_best())
