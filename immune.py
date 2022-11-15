@@ -21,7 +21,6 @@ class Immunity:
         self.best_clon_numb = best_clon_numb
         self.clon_numb = clons
 
-
     def immune_step(self, coef):
 
         best_pop = sorted(self.agents, key=itemgetter(2), reverse=False)[:self.best]
@@ -30,22 +29,16 @@ class Immunity:
         for pop in best_pop:
             for _ in range(self.clon_numb):
                 new_pop.append(pop.copy())
-        
+
         for npop in new_pop:
             npop[0] = npop[0] + coef * random.uniform(-0.5, 0.5)
             npop[1] = npop[1] + coef * random.uniform(-0.5, 0.5)
-            npop[2] = self.func(npop[0],npop[1])
-        
+            npop[2] = self.func(npop[0], npop[1])
+
         new_pop = sorted(new_pop, key=itemgetter(2), reverse=False)[:self.best_clon_numb]
 
         self.agents += new_pop
         self.agents = sorted(self.agents, key=itemgetter(2), reverse=False)[:self.agents_numb]
 
-
     def get_best(self):
         return self.agents[0]
-
-#my_immune = Immunity(rosenbrock_2,50, 5,10,10,5,5)
-#for i in range(50):
-#    my_immune.immune_step(1/(i+1))
-#    print(my_immune.get_best())
