@@ -26,19 +26,18 @@ class ImmuBac:
 
     def chemotaxis(func, step, populaton, coef):
         for bac in populaton:
-            vec = [coef* random.uniform(-1, 1), coef* random.uniform(-1, 1)]
+            vec = [coef * random.uniform(-1, 1), coef * random.uniform(-1, 1)]
             for _ in range(step):
                 f = bac[2]
 
-                bac[0] += vec[0]                    # X
-                bac[1] += vec[1]                    # Y
+                bac[0] += vec[0]  # X
+                bac[1] += vec[1]  # Y
                 bac[2] = func(bac[0], bac[1])  # Z / Фитнес-Функция
 
                 if f < bac[2]:
-                    vec = [coef* random.uniform(-1, 1), coef* random.uniform(-1, 1)]
-        
-        return populaton
+                    vec = [coef * random.uniform(-1, 1), coef * random.uniform(-1, 1)]
 
+        return populaton
 
     def elimnination(func, licvid, population, pos_x, pos_y):
         for bac in population:
@@ -48,7 +47,6 @@ class ImmuBac:
                 bac[2] = func(bac[0], bac[1])
         return population
 
-
     def immune_bact_step(self, coef):
 
         best_pop = sorted(self.agents, key=itemgetter(2), reverse=False)[:self.best]
@@ -57,19 +55,13 @@ class ImmuBac:
         for pop in best_pop:
             for _ in range(self.clon_numb):
                 new_pop.append(pop.copy())
-        
+
         new_pop = sorted(new_pop, key=itemgetter(2), reverse=False)[:self.best_clon_numb]
 
         self.agents += new_pop
-        self.agents = ImmuBac.chemotaxis(self.func, self.chemo_step,self.agents, coef).copy()
+        self.agents = ImmuBac.chemotaxis(self.func, self.chemo_step, self.agents, coef).copy()
         self.agents = ImmuBac.elimnination(self.func, self.licvid, self.agents, self.pos_x, self.pos_y).copy()
         self.agents = sorted(self.agents, key=itemgetter(2), reverse=False)[:self.agents_numb]
 
-
     def get_best(self):
         return self.agents[0]
-
-#my_immune = ImmuBac(rosenbrock_2,50, 5,10,10,5,0.2, 5, 5)
-#for i in range(50):
-#    my_immune.immune_bact_step(1/(i+1))
-#    print(my_immune.get_best())

@@ -684,7 +684,6 @@ def main():
     txt_f_tab_5.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
     btn_del_tab_5.pack(side=BOTTOM, padx=5, pady=5, fill=BOTH, expand=True)
 
-
     def draw_lab_6():
         fig.clf()
 
@@ -711,8 +710,7 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        immunity = Immunity(func,pop_number,clon,best_pop,best_clon,pos_x,pos_y)
-        
+        immunity = Immunity(func, pop_number, clon, best_pop, best_clon, pos_x, pos_y)
 
         for ag in immunity.agents:
             ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
@@ -729,7 +727,7 @@ def main():
         canvas.draw()
 
         for i in range(iter_number):
-            immunity.immune_step(1/(i+1))
+            immunity.immune_step(1 / (i + 1))
 
             for ag in immunity.agents:
                 ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
@@ -758,9 +756,9 @@ def main():
         ax.scatter(b[0], b[1], b[2], c="red")
 
         txt_tab_6.insert(INSERT,
-                        f"{i + 1}) ({round(b[0], 8)})"
-                        f" ({round(b[1], 8)}) = "
-                        f" ({round(b[2], 8)})\n")
+                         f"{i + 1}) ({round(b[0], 8)})"
+                         f" ({round(b[1], 8)}) = "
+                         f" ({round(b[2], 8)})\n")
 
         canvas.draw()
         window.update()
@@ -863,11 +861,11 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        bacterias = Bacteria(func, population,xemotaxis,licvid,pos_x,pos_y)
+        bacterias = Bacteria(func, population, xemotaxis, licvid, pos_x, pos_y)
 
         for i in range(iter_number):
 
-            bacterias.chemotaxis(1/(i+1))
+            bacterias.chemotaxis(1 / (i + 1))
             bacterias.reproduction()
             bacterias.elimnination()
 
@@ -893,16 +891,16 @@ def main():
             canvas.draw()
 
         for bac in bacterias.agents:
-                ax.scatter(bac[0], bac[1], bac[2], c="black", s=1, marker="s")
+            ax.scatter(bac[0], bac[1], bac[2], c="black", s=1, marker="s")
 
         b = bacterias.get_best()
         ax.scatter(b[0], b[1], b[2], c="red")
 
         txt_tab_7.insert(INSERT,
-                        f"{i + 1}) ({round(b[0], 6)})"
-                        f" ({round(b[1], 6)}) = "
-                        f" ({round(b[2], 6)})"
-                        f"H=({round(b[3], 2)})\n")
+                         f"{i + 1}) ({round(b[0], 6)})"
+                         f" ({round(b[1], 6)}) = "
+                         f" ({round(b[2], 6)})"
+                         f"H=({round(b[3], 2)})\n")
 
         canvas.draw()
         window.update()
@@ -983,21 +981,21 @@ def main():
     def draw_lab_8():
         fig.clf()
 
-        pop_number = int(txt_2_tab_8.get())
         iter_number = int(txt_1_tab_8.get())
+        pop_number = int(txt_2_tab_8.get())
         clon = int(txt_3_tab_8.get())
-        best_clon = int(txt_5_tab_8.get())
         best_pop = int(txt_4_tab_8.get())
-        chemo = int(txt_9_tab_8.get())
-        licvid = int(txt_10_tab_8.get())
-        pos_x = int(txt_6_tab_8.get())
-        pos_y = int(txt_7_tab_8.get())
+        chemo = int(txt_5_tab_8.get())
+        licvid = int(txt_6_tab_8.get())
+        best_clon = int(txt_7_tab_8.get())
         delay = txt_8_tab_8.get()
+        pos_x = int(txt_9_tab_8.get())
+        pos_y = int(txt_10_tab_8.get())
 
-        if combo_tab_6.get() == "Химмельблау":
+        if combo_tab_8.get() == "Химмельблау":
             func = himmelblau_2
             x, y, z = make_data_himmelblau(pos_x, pos_y)
-        elif combo_tab_6.get() == "Розенброка":
+        elif combo_tab_8.get() == "Розенброка":
             func = rosenbrock_2
             x, y, z = make_data_rosenbrock(pos_x, pos_y)
         else:
@@ -1008,8 +1006,7 @@ def main():
         ax.plot_surface(x, y, z, rstride=5, cstride=5, alpha=0.5, cmap="inferno")
         canvas.draw()
 
-        immu_ba = ImmuBac(func,pop_number,clon,best_pop,best_clon,chemo,licvid,pos_x,pos_y)
-        
+        immu_ba = ImmuBac(func, pop_number, clon, best_pop, best_clon, chemo, licvid, pos_x, pos_y)
 
         for ag in ImmuBac.agents:
             ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
@@ -1026,7 +1023,7 @@ def main():
         canvas.draw()
 
         for i in range(iter_number):
-            ImmuBac.immune_step(1/(i+1))
+            ImmuBac.immune_step(1 / (i + 1))
 
             for ag in ImmuBac.agents:
                 ax.scatter(ag[0], ag[1], ag[2], c="black", s=1, marker="s")
@@ -1055,9 +1052,9 @@ def main():
         ax.scatter(b[0], b[1], b[2], c="red")
 
         txt_tab_6.insert(INSERT,
-                        f"{i + 1}) ({round(b[0], 8)})"
-                        f" ({round(b[1], 8)}) = "
-                        f" ({round(b[2], 8)})\n")
+                         f"{i + 1}) ({round(b[0], 8)})"
+                         f" ({round(b[1], 8)}) = "
+                         f" ({round(b[2], 8)})\n")
 
         canvas.draw()
         window.update()
@@ -1102,7 +1099,6 @@ def main():
     txt_9_tab_8 = Entry(right_f_tab_8)
 
     txt_10_tab_8 = Entry(right_f_tab_8)
-    txt_11_tab_8 = Entry(right_f_tab_8)
 
     combo_tab_8 = Combobox(right_f_tab_8)
     combo_tab_8['values'] = ("Химмельблау", "Розенброка", "Растрыгина")
@@ -1140,7 +1136,6 @@ def main():
     txt_7_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_10_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
-    txt_11_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
 
     txt_8_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
     txt_9_tab_8.pack(side=TOP, padx=5, pady=5, fill=BOTH)
