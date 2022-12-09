@@ -24,11 +24,6 @@ from functions import *
 def main():
     window = Tk()
 
-    if sys.platform.startswith('win'):
-        window.iconbitmap(r'pic/Pop_cat_open.ico')
-    else:
-        window.iconbitmap(r'@pic/Pop_cat_open.xbm')
-
     width = window.winfo_screenwidth()
     height = window.winfo_screenheight()
 
