@@ -1,6 +1,5 @@
 import random
 from operator import itemgetter
-from functions import *
 
 
 class Immunity:
